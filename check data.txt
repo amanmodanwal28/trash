@@ -1,0 +1,14 @@
+// Middleware to check referer
+function checkReferer(req, res, next) {
+  const referer = req.get('referer');
+  console.log('Referer:', referer); // For debugging
+  console.log(IpsUrls)  ////   [ 'http://192.168.0.42:5000', 'http://192.168.10.15:5000' ]
+  // The allowed referer (your website)
+  const allowedReferer = 'http://192.168.0.42:5173/'; 
+
+  if (!referer || !referer.startsWith(allowedReferer)) {
+    return res.status(403).json({ error: 'Unauthorized access' });  // Block direct URL access
+  }
+
+  next();  // Allow access if the referer matches
+}
