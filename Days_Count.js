@@ -4,6 +4,7 @@ for(let i = 1;i<= counting ; i++){
   console.log(` the total day commit in your repo is  ${i}`);
 };
 
+
 array.forEach((num) => {
   console.log(`${num}`);
 })
