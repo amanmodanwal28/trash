@@ -1,0 +1,126 @@
+                                    ** Nodejs Install Process **
+
+1. Update your package list: Open a terminal and run the following command:
+
+ # sudo apt update
+
+2. Install required dependencies: Run this command to ensure you have the necessary software to fetch the Node.js packages:
+
+ # sudo apt install curl software-properties-common
+
+3. Add NodeSource repository: Node.js provides an official PPA (Personal Package Archive) to install the latest versions. To add the repository for the latest Node.js (LTS or Current), run:
+
+  **For LTS version (recommended for most users):
+
+ # curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+
+ ** For Current version (latest features, but may not be as stable):
+
+ # curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+
+
+4. Install Node.js: After adding the NodeSource repository, you can install Node.js by running:
+
+ # sudo apt install nodejs
+
+
+ 5.  ***Verify installation: Once the installation is complete, verify it by checking the Node.js and npm versions:
+
+#  node -v
+#  npm -v
+
+
+
+
+                                   2    ** Nodejs Install Process **
+
+Step 1: Install nvm (Node Version Manager)
+To install nvm, run the following commands:
+
+ 1. Download the nvm installation script:
+
+ # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+ 2. Activate nvm: After installation, you need to activate nvm. You can do this by either restarting your terminal or running the following command:
+
+ # source ~/.bashrc
+
+ 3. Verify nvm installation: To verify that nvm has been installed successfully, run:
+
+ # nvm -v
+
+Step 2: Install the latest version of Node.js with nvm
+Now that nvm is installed, you can use it to install the latest Node.js version.
+
+ 1. Install the latest stable version of Node.js:
+ 
+ # nvm install --lts
+
+ 2. Verify the installation: Check the installed Node.js and npm versions:
+
+ # node -v
+ # npm -v
+
+
+Step 3: Switch between Node.js versions (optional)
+If you want to switch between different versions of Node.js, you can use nvm to install other versions and set one as the default:
+
+** To install a specific version:
+
+# nvm install <version>
+
+**To switch between versions:
+
+nvm use <version>
+
+
+
+
+
+
+                                        **  Nodejs Uninstall Process  ** 
+
+
+1. Remove Node.js Snap package:
+First, try to remove the Snap package of Node.js using the following command:
+
+    # sudo snap remove node
+
+2. Check for any remaining Snap packages:
+If Node.js is still present, list all installed Snap packages:
+
+    # snap list
+
+Look for Node.js in the list, and if it exists, remove it again using:
+
+ # sudo snap remove node
+   
+
+3. Remove Node.js via apt (if installed through apt earlier):
+If Node.js was installed through apt earlier, remove it using:
+
+   # sudo apt-get remove --purge nodejs npm
+
+    # sudo apt-get autoremove
+
+    # sudo apt-get autoclean
+
+
+4. Delete Node.js-related folders (if they still exist):
+Remove any remaining Node.js directories:
+
+ # sudo rm -rf /usr/local/lib/node_modules
+ # sudo rm -rf /usr/local/bin/node
+ # sudo rm -rf /usr/local/bin/npm
+
+5. Verify removal:
+After performing the above steps, verify that Node.js and npm are no longer available:
+
+ # node -v
+ # npm -v
+
+
+Both commands should now give an error indicating that Node.js and npm are not found.
+                                         
+
+
