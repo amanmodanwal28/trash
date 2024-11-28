@@ -12,17 +12,16 @@
 
   **For LTS version (recommended for most users):
 
-##################################################################
-                                                                                                                                                        #####
- # curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -                #####
-                                                                                                                                                       #####
-   ******************* OR  *******************************             #####
-                                                                                                                                                      #####
- ** For Current version (latest features, but may not be as stable):                  #####
-                                                                                                                                                      #####
- # curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -    #####
-                                                                                                                                                      #####
-#################################################################
+#################################################################################
+                                                                            #####
+ # curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -       #####
+                                                                            #####
+        ******************* OR  *******************************             #####                                                                                                                                                                                     #####
+ ** For Current version (latest features, but may not be as stable):        #####
+                                                                            #####
+ # curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -   #####
+                                                                            #####
+#################################################################################
 
 
 3.1. Download the nvm installation script:
