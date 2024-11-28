@@ -12,12 +12,26 @@
 
   **For LTS version (recommended for most users):
 
- # curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+##################################################################
+                                                                                                                                                        #####
+ # curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -                #####
+                                                                                                                                                       #####
+   ******************* OR  *******************************             #####
+                                                                                                                                                      #####
+ ** For Current version (latest features, but may not be as stable):                  #####
+                                                                                                                                                      #####
+ # curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -    #####
+                                                                                                                                                      #####
+#################################################################
 
- ** For Current version (latest features, but may not be as stable):
 
- # curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+3.1. Download the nvm installation script:
 
+ # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+3.2. Activate nvm: After installation, you need to activate nvm. You can do this by either restarting your terminal or running the following command:
+
+ # source ~/.bashrc
 
 4. Install Node.js: After adding the NodeSource repository, you can install Node.js by running:
 
@@ -28,7 +42,16 @@
 
 #  node -v
 #  npm -v
+#  npx -v
+#  nvm -v
 
+
+6. ***Install the OpenSSH server:
+
+ # sudo apt install openssh-server -y
+7. *** Check the SSH service status: After installation, SSH should start automatically.    Verify its status with:
+
+ # sudo systemctl status ssh
 
 
 
@@ -74,7 +97,13 @@ If you want to switch between different versions of Node.js, you can use nvm to 
 nvm use <version>
 
 
+Step 4 . ***Install the OpenSSH server:
 
+ # sudo apt install openssh-server -y
+
+Step 5. *** Check the SSH service status: After installation, SSH should start automatically.    Verify its status with:
+
+ # sudo systemctl status ssh
 
 
 
@@ -113,11 +142,31 @@ Remove any remaining Node.js directories:
  # sudo rm -rf /usr/local/bin/node
  # sudo rm -rf /usr/local/bin/npm
 
-5. Verify removal:
+
+5. Remove NVM directory
+
+ # rm -rf ~/.nvm
+
+6. Remove NVM references from shell configuration files
+
+ # sed -i '/NVM_DIR/d' ~/.bashrc ~/.zshrc ~/.profile ~/.bash_profile 2>/dev/null
+
+ # sed -i '/nvm.sh/d' ~/.bashrc ~/.zshrc ~/.profile ~/.bash_profile 2>/dev/null
+
+ # sed -i '/bash_completion/d' ~/.bashrc ~/.zshrc ~/.profile ~/.bash_profile 2>/dev/null
+
+7. Reload the shell to apply changes
+ # exec $SHELL
+
+
+
+8. Verify removal:
 After performing the above steps, verify that Node.js and npm are no longer available:
 
  # node -v
  # npm -v
+ # nvm -v
+ # npx -v
 
 
 Both commands should now give an error indicating that Node.js and npm are not found.
