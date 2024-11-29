@@ -27,44 +27,41 @@
 
  # sudo apt install nodejs
 
+5. Verify installation: Once the installation is complete, verify it by checking the Node.js and npm versions:
 
- 5.  ***Verify installation: Once the installation is complete, verify it by checking the Node.js and npm versions:
-
-#  node -v
-#  npm -v
-#  npx -v
-#  nvm -v
+ #  node -v
+ #  npm -v
+ #  npx -v
+ #  nvm -v
 
 
-6. ***Install the OpenSSH server:
+6. Install the OpenSSH server:
 
  # sudo apt install openssh-server -y
-7. *** Check the SSH service status: After installation, SSH should start automatically.    Verify its status with:
+
+7. Check the SSH service status: After installation, SSH should start automatically.    Verify its status with:
 
  # sudo systemctl status ssh
-
 
 
                                         **  Nodejs Uninstall Process  ** 
 
 
 1. Remove Node.js via apt (if installed through apt earlier):
-If Node.js was installed through apt earlier, remove it using:
+   If Node.js was installed through apt earlier, remove it using:
 
-   # sudo apt-get remove --purge nodejs npm
+ # sudo apt-get remove --purge nodejs npm
 
-    # sudo apt-get autoremove
+ # sudo apt-get autoremove
 
-    # sudo apt-get autoclean
-
+ # sudo apt-get autoclean
 
 2. Delete Node.js-related folders (if they still exist):
-Remove any remaining Node.js directories:
+   Remove any remaining Node.js directories:
 
  # sudo rm -rf /usr/local/lib/node_modules
  # sudo rm -rf /usr/local/bin/node
  # sudo rm -rf /usr/local/bin/npm
-
 
 3. Remove NVM directory
 
@@ -79,20 +76,18 @@ Remove any remaining Node.js directories:
  # sed -i '/bash_completion/d' ~/.bashrc ~/.zshrc ~/.profile ~/.bash_profile 2>/dev/null
 
 5. Reload the shell to apply changes
+
  # exec $SHELL
 
-
-
 6. Verify removal:
-After performing the above steps, verify that Node.js and npm are no longer available:
+   After performing the above steps, verify that Node.js and npm are no longer available:
 
  # node -v
  # npm -v
  # nvm -v
  # npx -v
 
-
-All commands should now give an error indicating that Node.js, npm,npx and nvm are not found.
+   All commands should now give an error indicating that Node.js, npm,npx and nvm are not found.
                                          
 
 
