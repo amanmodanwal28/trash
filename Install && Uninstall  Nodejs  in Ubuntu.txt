@@ -57,22 +57,7 @@
                                         **  Nodejs Uninstall Process  ** 
 
 
-1. Remove Node.js Snap package:
-First, try to remove the Snap package of Node.js using the following command:
-
-    # sudo snap remove node
-
-2. Check for any remaining Snap packages:
-If Node.js is still present, list all installed Snap packages:
-
-    # snap list
-
-Look for Node.js in the list, and if it exists, remove it again using:
-
- # sudo snap remove node
-   
-
-3. Remove Node.js via apt (if installed through apt earlier):
+1. Remove Node.js via apt (if installed through apt earlier):
 If Node.js was installed through apt earlier, remove it using:
 
    # sudo apt-get remove --purge nodejs npm
@@ -82,7 +67,7 @@ If Node.js was installed through apt earlier, remove it using:
     # sudo apt-get autoclean
 
 
-4. Delete Node.js-related folders (if they still exist):
+2. Delete Node.js-related folders (if they still exist):
 Remove any remaining Node.js directories:
 
  # sudo rm -rf /usr/local/lib/node_modules
@@ -90,11 +75,11 @@ Remove any remaining Node.js directories:
  # sudo rm -rf /usr/local/bin/npm
 
 
-5. Remove NVM directory
+3. Remove NVM directory
 
  # rm -rf ~/.nvm
 
-6. Remove NVM references from shell configuration files
+4. Remove NVM references from shell configuration files
 
  # sed -i '/NVM_DIR/d' ~/.bashrc ~/.zshrc ~/.profile ~/.bash_profile 2>/dev/null
 
@@ -102,12 +87,12 @@ Remove any remaining Node.js directories:
 
  # sed -i '/bash_completion/d' ~/.bashrc ~/.zshrc ~/.profile ~/.bash_profile 2>/dev/null
 
-7. Reload the shell to apply changes
+5. Reload the shell to apply changes
  # exec $SHELL
 
 
 
-8. Verify removal:
+6. Verify removal:
 After performing the above steps, verify that Node.js and npm are no longer available:
 
  # node -v
@@ -116,7 +101,7 @@ After performing the above steps, verify that Node.js and npm are no longer avai
  # npx -v
 
 
-Both commands should now give an error indicating that Node.js and npm are not found.
+All commands should now give an error indicating that Node.js, npm,npx and nvm are not found.
                                          
 
 
