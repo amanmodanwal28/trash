@@ -10,18 +10,9 @@
 
 3. Add NodeSource repository: Node.js provides an official PPA (Personal Package Archive) to install the latest versions. To add the repository for the latest Node.js (LTS or Current), run:
 
-  **For LTS version (recommended for most users):
+** For 22 version :   
 
-#################################################################################
-                                                                            #####
- # curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -       #####
-                                                                            #####
-        ******************* OR  *******************************             #####                                                                                                                                                                                     #####
- ** For Current version (latest features, but may not be as stable):        #####
-                                                                            #####
- # curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -   #####
-                                                                            #####
-#################################################################################
+ # curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 
 
 3.1. Download the nvm installation script:
