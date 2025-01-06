@@ -1,4 +1,4 @@
-const counting = 73;
+const counting = 74;
 
 const array = [1, 2, 3, 4, 5, 6, 7, 8, 8, 9]
 for (let i = 1; i <= counting; i++) {
