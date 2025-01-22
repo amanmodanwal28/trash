@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const counting = 85;
+=======
+const counting = 85
+>>>>>>> dae1fbc40a95f39e5e243b3fb9e92ed8c11d7589
 
 const array = [1, 2, 3, 4, 5, 6, 7, 8, 8, 9]
 for (let i = 1; i <= counting; i++) {
