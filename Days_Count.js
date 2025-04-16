@@ -6,3 +6,5 @@ for (let i = 1; i <= counting; i++) {
 array.forEach((num) => {
   console.log(`${num}`)
 })
+
+https://chatgpt.com/share/67ff283c-203c-800c-9789-ccfb4094e922
