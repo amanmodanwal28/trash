@@ -1,42 +1,368 @@
 #!/bin/bash
 
-# Source and destination paths
-SRC="$HOME/Downloads/IOB_Server"
-DEST="/home/ptcs/iob/bin"
 
-# Check if source exists
-if [ -d "$SRC" ]; then
-    echo "Moving contents from $SRC to $DEST ..."
+LOGFILE="/var/log/autorun.log"
+SERVICE_FILE="/etc/systemd/system/autorun.service"
+SCRIPT_PATH="/usr/local/bin/autorun.sh"
 
-    # Create destination if it doesn't exist
-    mkdir -p "$DEST"
+# Autorun Script for Node.js, SSH, and DNSMasq Setup
+# Author: PPS INTERNATIONAL
+# Description: Automates Node.js installation, SSH setup, DNSMasq configuration, and other dependencies.
 
-    # Move all contents (files + folders) from source to destination
-    mv "$SRC"/* "$DEST"/
+# Enable strict error handling
+set -e
 
-    echo "✅ All contents moved successfully."
+# Log file
+LOGFILE="/var/log/autorun.log"
+
+
+
+# Get the real user (not root)
+USER="${SUDO_USER:-$(whoami)}"
+USER_HOME="home/${USER}"
+
+IOB_DIR="/${USER_HOME}/Iob"
+BIN_DIR="${IOB_DIR}/bin"
+LOGFILE="/var/log/autorun.log"
+
+echo "Real user home: $USER_HOME" >> "$LOGFILE"
+echo "Starting Iob/bin setup at $(date)" >> "$LOGFILE"
+
+# Create Iob and bin directories if they don't exist
+if [ ! -d "$IOB_DIR" ]; then
+    mkdir -p "$BIN_DIR"
+    chmod 777 "$IOB_DIR"
+    chmod 777 "$BIN_DIR"
+    echo "Created Iob and bin directories with full permissions." >> "$LOGFILE"
 else
-    echo "❌ Source folder does not exist: $SRC"
-fi
+    echo "Iob directory already exists at $IOB_DIR." >> "$LOGFILE"
 
-
-
-
-
-#!/bin/bash
-
-SRC="$HOME/Downloads/IOB_Server"
-DEST="/home/ptcs/iob/bin"
-
-if [ -d "$SRC" ]; then
-    mkdir -p "$DEST"
-    mv "$SRC"/* "$DEST"/
-    echo "✅ All data moved from $SRC to $DEST"
-else
-    echo "❌ Source not found: $SRC"
-    if [ -d "$DEST/IOB_Server" ]; then
-        echo "ℹ️ Folder already exists in destination."
+    if [ ! -d "$BIN_DIR" ]; then
+        mkdir -m 777 "$BIN_DIR"
+        echo "Created bin directory inside Iob with full permissions." >> "$LOGFILE"
     else
-        echo "ℹ️ Folder not found in destination."
+        echo "bin directory already exists at $BIN_DIR." >> "$LOGFILE"
     fi
 fi
+
+echo "Iob/bin setup complete at $(date)" >> "$LOGFILE"
+
+
+
+
+
+echo "Starting installation..." | tee -a "$LOGFILE"
+
+# Allow password-less sudo for the current user
+
+
+#USER=$(who | awk '{print $1}' | head -n 1)
+#USER=$(logname 2>/dev/null || who | awk '{print $1}' | head -n 1)
+#USER=$(awk -F: '$3 >= 1000 && $3 < 65534 {print $1; exit}' /etc/passwd)
+
+USER="${SUDO_USER:-$(whoami)}"
+SUDOERS_FILE="/etc/sudoers.d/$USER-no-passwd"
+echo "username $USER" | tee -a "$LOGFILE"
+
+# Add NOPASSWD entry for the current user
+echo "$USER ALL=(ALL) NOPASSWD:ALL" > "$SUDOERS_FILE"
+chmod 0440 "$SUDOERS_FILE"
+echo "Password-less sudo enabled for user $USER" | tee -a "$LOGFILE"
+
+echo "Installation completed." | tee -a "$LOGFILE"
+
+
+# Update package list
+echo "Updating package list..." | tee -a $LOGFILE
+sudo apt update
+
+
+# Function to check installation
+check_package() {
+  dpkg -l | grep -qw "$1"
+}
+
+# Install required dependencies
+echo "Installing dependencies..." | tee -a $LOGFILE
+sudo apt install -y curl software-properties-common ubuntu-restricted-extras net-tools screen
+
+# Install GStreamer
+echo "Installing GStreamer..." | tee -a $LOGFILE
+sudo apt install -y gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools
+
+# Add dialout in USER to access  user to our serial port
+echo "Add dialout in USER to access  user to our serial port" | tee -a $LOGFILE
+sudo usermod -aG dialout $USER
+
+
+# Function to check if a command exists
+check_installation() {
+    if command -v "$1" &> /dev/null; then
+        echo "$1 is already installed." | tee -a "$LOGFILE"
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Check and Install Google Chrome if not installed
+if ! check_installation "google-chrome"; then
+    echo "Downloading Google Chrome..." | tee -a "$LOGFILE"
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+    echo "Installing Google Chrome..." | tee -a "$LOGFILE"
+    sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt --fix-broken install -y
+
+    # Remove downloaded file
+    rm -f google-chrome.deb
+
+    # Verify Installation
+    echo "Verifying Google Chrome installation..." | tee -a "$LOGFILE"
+    google-chrome --version | tee -a "$LOGFILE"
+fi
+
+# Verify Google Chrome Version
+echo "Verifying Google Chrome installation..." | tee -a "$LOGFILE"
+google-chrome --version | tee -a "$LOGFILE"
+
+# Check and Install Node.js if not installed
+if ! check_installation "node"; then
+    echo "Adding Node.js 22 repository..." | tee -a "$LOGFILE"
+    curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+    sudo apt install -y nodejs
+
+    # Verify Installation
+    check_installation "node"
+fi
+
+# Install NVM
+echo "Installing NVM..." | tee -a $LOGFILE
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+source ~/.bashrc
+
+# Verify Node.js and NPM installation
+echo "Verifying Node.js and NPM installation..." | tee -a $LOGFILE
+node -v | tee -a $LOGFILE
+npm -v | tee -a $LOGFILE
+npx -v | tee -a $LOGFILE
+nvm -v | tee -a $LOGFILE
+
+# Function to check if a package is installed
+check_package() {
+    dpkg -l | grep -qw "$1"
+}
+
+# Check and Install OpenSSH if not installed
+if check_package "openssh-server"; then
+    echo "OpenSSH is already installed." | tee -a "$LOGFILE"
+else
+    echo "Installing OpenSSH server..." | tee -a "$LOGFILE"
+    sudo apt install -y openssh-server
+
+    echo "Enabling and starting SSH service..." | tee -a "$LOGFILE"
+    sudo systemctl enable ssh
+    sudo systemctl start ssh
+fi
+
+# Check SSH status
+echo "Checking SSH status..." | tee -a "$LOGFILE"
+sudo systemctl is-active ssh | tee -a "$LOGFILE"
+
+# Disable systemd-resolved to free port 53
+echo "Disabling systemd-resolved..." | tee -a $LOGFILE
+sudo systemctl stop systemd-resolved | tee -a $LOGFILE
+sudo systemctl disable systemd-resolved | tee -a $LOGFILE
+sudo systemctl mask systemd-resolved | tee -a $LOGFILE
+
+# Disable NetworkManager DNS management
+echo "Configuring NetworkManager to stop DNS handling..." | tee -a $LOGFILE
+sudo bash -c 'cat <<EOF >> /etc/NetworkManager/NetworkManager.conf
+
+dns=none
+EOF'
+
+# Restart NetworkManager
+echo "Restarting NetworkManager..." | tee -a $LOGFILE
+#sudo systemctl restart NetworkManager | tee -a $LOGFILE
+
+# Make it immutable
+#sudo chattr -i /etc/resolv.conf
+
+
+# Check if /etc/resolv.conf is immutable
+if lsattr /etc/resolv.conf 2>/dev/null | grep -q '\-i-'; then
+  echo "/etc/resolv.conf is immutable. Making it editable..."
+  sudo chattr -i /etc/resolv.conf
+else
+  echo "/etc/resolv.conf is already editable. No action needed."
+fi
+
+# Remove resolve.conf
+sudo rm /etc/resolv.conf
+
+# Remove existing resolv.conf and create a new one
+echo "Configuring resolv.conf..." | tee -a $LOGFILE
+sudo bash -c 'cat <<EOF > /etc/resolv.conf
+nameserver 127.0.0.53
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+nameserver 127.0.0.1
+EOF'
+
+# set read-only permissions
+sudo chmod 444 /etc/resolv.conf
+
+# Make it immutable
+sudo chattr +i /etc/resolv.conf
+
+# Install and configure DNSMasq
+echo "Installing DNSMasq..." | tee -a $LOGFILE
+sudo apt install -y dnsmasq
+
+# Find the correct network interface
+INTERFACE=$(ip route | grep default | awk '{print $5}')
+echo "Detected network interface: $INTERFACE" | tee -a $LOGFILE
+
+# Append to dnsmasq.conf
+echo "Configuring DNSMasq..." | tee -a $LOGFILE
+
+
+
+# Check if configuration already exists before appending
+if ! grep -q "vb-wifi.in" /etc/dnsmasq.conf; then
+    echo "Configuring DNSMasq..." | tee -a "$LOGFILE"
+    sudo bash -c "cat <<EOF >> /etc/dnsmasq.conf
+
+# Custom DNSMasq Config
+# Listen on all interfaces
+bind-dynamic
+
+# Assign DNS server to all devices
+dhcp-option=option:dns-server,192.168.0.243
+
+# Redirect vb-wifi.in to 192.168.0.243
+address=/vb-wifi.in/192.168.0.243
+
+# Optional: Forward other DNS requests to public DNS
+server=8.8.8.8
+server=1.1.1.1
+EOF"
+else
+    echo "DNSMasq configuration already exists. Skipping configuration update." | tee -a "$LOGFILE"
+fi
+
+# Check if the hostname already exists in /etc/hosts
+if ! grep -q "vb-wifi.in" /etc/hosts; then
+    echo "Adding hostname to /etc/hosts..." | tee -a "$LOGFILE"
+    sudo bash -c 'echo "192.168.0.243 vb-wifi.in" >> /etc/hosts'
+else
+    echo "Hostname already exists in /etc/hosts. Skipping addition." | tee -a "$LOGFILE"
+fi
+
+# Restart and enable DNSMasq service
+echo "Restarting and enabling DNSMasq..." | tee -a "$LOGFILE"
+sudo systemctl restart dnsmasq
+sudo systemctl enable dnsmasq
+
+# Verify DNSMasq status
+echo "Checking DNSMasq status..." | tee -a "$LOGFILE"
+sudo systemctl is-active dnsmasq | tee -a "$LOGFILE"
+
+
+# Create systemd service if not already created
+if [ ! -f "$SERVICE_FILE" ]; then
+    echo "Creating systemd service for autorun..." | tee -a "$LOGFILE"
+    sudo bash -c "cat <<EOF > $SERVICE_FILE
+[Unit]
+Description=Autorun Script for Node.js and IOB_Server
+After=network.target multi-user.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash $SCRIPT_PATH
+ExecStartPre=/bin/sleep 10
+Restart=on-failure
+RestartSec=5
+User=root
+StandardOutput=journal
+StandardError=journal
+Environment=\"HOME=/root\" \"USER=root\"
+ExecStartPre=/bin/sleep 10
+
+[Install]
+WantedBy=multi-user.target
+EOF"
+else
+    echo "Systemd service already exists. Skipping creation." | tee -a "$LOGFILE"
+fi
+
+
+# Function to check if a systemd service exists
+service_exists() {
+    systemctl list-units --full -all | grep -q "$1"
+}
+
+# Reload systemd if needed and enable the service
+if ! service_exists "autorun.service"; then
+    echo "Enabling autorun service..." | tee -a "$LOGFILE"
+    sudo systemctl daemon-reload
+    sudo systemctl enable autorun.service
+    sudo systemctl start autorun.service
+else
+    echo "Autorun service is already enabled and running." | tee -a "$LOGFILE"
+fi
+
+
+# Find IOB_Server directory
+IOB_Server_DIR=$(find /home/$USER -type d -name "IOB_Server" 2>/dev/null)
+
+
+
+# SRC="$HOME/Downloads/IOB_Server"
+DEST="/home/ptcs/iob/bin"
+
+if [ -d "$IOB_Server_DIR" ]; then
+    # mkdir -p "$BIN_DIR"
+    mv "$IOB_Server_DIR"/* "$BIN_DIR"/
+    echo "✅ All data moved from $IOB_Server_DIR to $BIN_DIR" | tee -a "$LOGFILE"
+else
+    echo "❌ Source not found: $IOB_Server_DIR"
+    if [ -d "$BIN_DIR/IOB_Server" ]; then
+        echo "ℹ️ Folder already exists in destination." | tee -a "$LOGFILE"
+    else
+        echo "ℹ️ Folder not found in destination." | tee -a "$LOGFILE"
+    fi
+fi
+
+
+
+if [ -n "$IOB_Server_DIR" ]; then
+  echo "IOB_Server directory found at: $IOB_Server_DIR" | tee -a "$LOGFILE"
+
+  # Navigate to IOB_Server directory and run the command
+  cd "$IOB_Server_DIR" || exit
+  echo "Running 'sudo npm run serve_linux' in $IOB_Server_DIR" | tee -a "$LOGFILE"
+  #sudo npm run serve_linux | tee -a "$LOGFILE"
+  #npm install | tee -a "$LOGFILE"
+  # Run npm command as the correct user
+  sudo -u "$USER" bash -c "cd '$IOB_Server_DIR' && npm install" | tee -a "$LOGFILE"
+else
+  echo "IOB_Server directory not found." | tee -a "$LOGFILE"
+fi
+
+# Install http-server globally
+echo "Installing http-server globally..." | tee -a $LOGFILE
+sudo npm install -g http-server
+echo "http-server installed successfully." | tee -a $LOGFILE
+
+
+# Reboot system
+echo "Rebooting system..." | tee -a $LOGFILE
+#sudo reboot
+sudo cp /home/ptcs/Downloads/IOB_autorun_file/autorun.sh  /usr/local/bin/autorun.sh
+
+# End of script
+echo "Installation complete. System rebooting..." | tee -a $LOGFILE
+
