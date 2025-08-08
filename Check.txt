@@ -18,3 +18,25 @@ if [ -d "$SRC" ]; then
 else
     echo "❌ Source folder does not exist: $SRC"
 fi
+
+
+
+
+
+#!/bin/bash
+
+SRC="$HOME/Downloads/IOB_Server"
+DEST="/home/ptcs/iob/bin"
+
+if [ -d "$SRC" ]; then
+    mkdir -p "$DEST"
+    mv "$SRC"/* "$DEST"/
+    echo "✅ All data moved from $SRC to $DEST"
+else
+    echo "❌ Source not found: $SRC"
+    if [ -d "$DEST/IOB_Server" ]; then
+        echo "ℹ️ Folder already exists in destination."
+    else
+        echo "ℹ️ Folder not found in destination."
+    fi
+fi
