@@ -1,0 +1,2298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KCS601 Software Engineering — Complete Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f1a;
+    --surface: #141624;
+    --surface2: #1c1f33;
+    --border: #252840;
+    --accent: #7c6af7;
+    --accent2: #f7c66a;
+    --accent3: #6af7c2;
+    --accent4: #f76a6a;
+    --text: #e8eaf6;
+    --text-muted: #8890b8;
+    --unit1: #7c6af7;
+    --unit2: #f76a9e;
+    --unit3: #6af7c2;
+    --unit4: #f7c66a;
+    --unit5: #f76a6a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Nunito',sans-serif; display:flex; min-height:100vh; }
+  
+  /* ---- SIDEBAR ---- */
+  #sidebar {
+    width: 280px; min-height:100vh; background:var(--surface);
+    border-right:1px solid var(--border); position:fixed; left:0; top:0;
+    overflow-y:auto; z-index:100; transition:.3s;
+  }
+  #sidebar-header {
+    padding:24px 20px 16px;
+    background: linear-gradient(135deg, #1a1040, #0d1a2e);
+    border-bottom:1px solid var(--border);
+  }
+  #sidebar-header h2 { font-family:'Syne',sans-serif; font-size:1.1rem; color:var(--accent); letter-spacing:2px; text-transform:uppercase; }
+  #sidebar-header p { font-size:.75rem; color:var(--text-muted); margin-top:4px; }
+  .nav-unit { padding:8px 20px 4px; font-family:'IBM Plex Mono',monospace; font-size:.65rem; letter-spacing:3px; text-transform:uppercase; color:var(--text-muted); margin-top:8px; }
+  .nav-link {
+    display:block; padding:10px 20px; font-size:.85rem; color:var(--text-muted);
+    text-decoration:none; border-left:3px solid transparent; transition:.2s;
+    cursor:pointer;
+  }
+  .nav-link:hover, .nav-link.active { color:var(--text); background:var(--surface2); }
+  .nav-link.u1 { border-left-color:var(--unit1); }
+  .nav-link.u2 { border-left-color:var(--unit2); }
+  .nav-link.u3 { border-left-color:var(--unit3); }
+  .nav-link.u4 { border-left-color:var(--unit4); }
+  .nav-link.u5 { border-left-color:var(--unit5); }
+  .nav-link.pyq { border-left-color:#fff; }
+  .badge { display:inline-block; padding:1px 7px; border-radius:999px; font-size:.65rem; margin-left:6px; font-family:'IBM Plex Mono',monospace; }
+  .hot { background:#f76a6a22; color:#f76a6a; border:1px solid #f76a6a44; }
+  
+  /* ---- MAIN ---- */
+  #main { margin-left:280px; padding:0 40px 80px; max-width:1100px; width:100%; }
+  
+  /* ---- HERO ---- */
+  #hero {
+    background: linear-gradient(135deg, #1a1040 0%, #0d1a2e 50%, #0d1a1a 100%);
+    padding:60px 40px; margin:0 -40px 40px; position:relative; overflow:hidden;
+    border-bottom:1px solid var(--border);
+  }
+  #hero::before {
+    content:''; position:absolute; top:-80px; right:-80px;
+    width:400px; height:400px;
+    background: radial-gradient(circle, #7c6af720 0%, transparent 70%);
+  }
+  #hero::after {
+    content:''; position:absolute; bottom:-60px; left:20%;
+    width:300px; height:300px;
+    background: radial-gradient(circle, #f76a9e15 0%, transparent 70%);
+  }
+  #hero h1 { font-family:'Syne',sans-serif; font-size:2.8rem; font-weight:800; line-height:1.1; position:relative; z-index:1; }
+  #hero h1 span { color:var(--accent); }
+  #hero p { margin-top:16px; color:var(--text-muted); max-width:600px; line-height:1.7; position:relative; z-index:1; }
+  .hero-tags { display:flex; gap:10px; margin-top:20px; flex-wrap:wrap; position:relative; z-index:1; }
+  .tag { padding:5px 14px; border-radius:999px; font-size:.75rem; font-family:'IBM Plex Mono',monospace; border:1px solid; }
+  .tag-purple { color:#7c6af7; border-color:#7c6af744; background:#7c6af710; }
+  .tag-pink { color:#f76a9e; border-color:#f76a9e44; background:#f76a9e10; }
+  .tag-green { color:#6af7c2; border-color:#6af7c244; background:#6af7c210; }
+  .tag-yellow { color:#f7c66a; border-color:#f7c66a44; background:#f7c66a10; }
+  .tag-red { color:#f76a6a; border-color:#f76a6a44; background:#f76a6a10; }
+
+  /* ---- SECTIONS ---- */
+  .section { margin-bottom:60px; scroll-margin-top:20px; }
+  .unit-header {
+    display:flex; align-items:center; gap:16px; margin-bottom:28px;
+    padding:20px 24px; border-radius:12px;
+    background:var(--surface); border:1px solid var(--border);
+  }
+  .unit-num {
+    font-family:'Syne',sans-serif; font-size:2rem; font-weight:800;
+    width:56px; height:56px; display:flex; align-items:center; justify-content:center;
+    border-radius:12px; flex-shrink:0;
+  }
+  .u1-bg { background:#7c6af720; color:#7c6af7; border:2px solid #7c6af744; }
+  .u2-bg { background:#f76a9e20; color:#f76a9e; border:2px solid #f76a9e44; }
+  .u3-bg { background:#6af7c220; color:#6af7c2; border:2px solid #6af7c244; }
+  .u4-bg { background:#f7c66a20; color:#f7c66a; border:2px solid #f7c66a44; }
+  .u5-bg { background:#f76a6a20; color:#f76a6a; border:2px solid #f76a6a44; }
+  .unit-header-text h2 { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; }
+  .unit-header-text p { font-size:.85rem; color:var(--text-muted); margin-top:4px; }
+  
+  /* ---- CARDS ---- */
+  .card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; padding:24px; margin-bottom:20px;
+    transition: border-color .2s;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card-title {
+    font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700;
+    margin-bottom:14px; display:flex; align-items:center; gap:10px;
+  }
+  .card-title::before {
+    content:''; display:inline-block; width:4px; height:20px; border-radius:2px;
+    background:var(--accent); flex-shrink:0;
+  }
+  .card-title.pink::before { background:var(--unit2); }
+  .card-title.green::before { background:var(--unit3); }
+  .card-title.yellow::before { background:var(--unit4); }
+  .card-title.red::before { background:var(--unit5); }
+
+  /* ---- CONTENT ELEMENTS ---- */
+  .prose { line-height:1.85; color:#c8cce8; font-size:.95rem; }
+  .prose p { margin-bottom:12px; }
+  .prose strong { color:var(--text); }
+  .hinglish { color:var(--accent3); font-style:italic; font-size:.9rem; margin-bottom:10px; display:block; }
+  
+  .def-box {
+    background:linear-gradient(135deg, #7c6af715, #f76a9e08);
+    border:1px solid #7c6af733; border-radius:10px; padding:16px 20px; margin:14px 0;
+  }
+  .def-box.green { background:linear-gradient(135deg, #6af7c215, #6af7c208); border-color:#6af7c233; }
+  .def-box.yellow { background:linear-gradient(135deg, #f7c66a15, #f7c66a08); border-color:#f7c66a33; }
+  .def-box.red { background:linear-gradient(135deg, #f76a6a15, #f76a6a08); border-color:#f76a6a33; }
+  .def-box strong { color:var(--accent2); display:block; margin-bottom:6px; font-family:'IBM Plex Mono',monospace; font-size:.85rem; }
+  
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:.88rem; }
+  th { background:var(--surface2); color:var(--accent); font-family:'IBM Plex Mono',monospace; font-size:.8rem; text-align:left; padding:10px 14px; border-bottom:2px solid var(--border); }
+  td { padding:10px 14px; border-bottom:1px solid var(--border); color:#c8cce8; }
+  tr:hover td { background:#ffffff05; }
+
+  ul.styled, ol.styled { padding-left:0; list-style:none; }
+  ul.styled li, ol.styled li {
+    padding:8px 0 8px 24px; border-bottom:1px solid var(--border);
+    position:relative; font-size:.92rem; color:#c8cce8; line-height:1.6;
+    counter-increment: list;
+  }
+  ul.styled li::before { content:'▸'; position:absolute; left:4px; color:var(--accent); }
+  ol.styled { counter-reset: list; }
+  ol.styled li::before { content:counter(list); position:absolute; left:0; color:var(--accent2); font-family:'IBM Plex Mono',monospace; font-size:.8rem; font-weight:600; }
+
+  .diagram {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:20px; margin:16px 0; font-family:'IBM Plex Mono',monospace;
+    font-size:.8rem; overflow-x:auto; line-height:1.8;
+  }
+  .diagram-title { font-family:'Syne',sans-serif; font-size:.8rem; color:var(--accent2); margin-bottom:12px; letter-spacing:2px; text-transform:uppercase; }
+  
+  .important-box {
+    border-left:4px solid var(--accent2); background:#f7c66a0a;
+    padding:14px 18px; border-radius:0 8px 8px 0; margin:16px 0;
+  }
+  .important-box .label { font-family:'IBM Plex Mono',monospace; font-size:.7rem; color:var(--accent2); letter-spacing:2px; margin-bottom:6px; }
+  
+  .exam-q {
+    background:linear-gradient(135deg, #f7c66a0a, #f76a9e05);
+    border:1px solid #f7c66a33; border-radius:10px; padding:16px 20px; margin:12px 0;
+  }
+  .exam-q .q-label { font-family:'IBM Plex Mono',monospace; font-size:.7rem; color:var(--accent2); margin-bottom:8px; }
+  .exam-q .q-text { font-size:.92rem; color:var(--text); margin-bottom:10px; font-weight:600; }
+  .exam-q .q-ans { font-size:.88rem; color:#c8cce8; line-height:1.7; }
+
+  .code-block {
+    background:#060810; border:1px solid var(--border); border-radius:8px;
+    padding:16px; font-family:'IBM Plex Mono',monospace; font-size:.8rem;
+    overflow-x:auto; margin:12px 0; color:#a8f0c8;
+    line-height:1.7;
+  }
+  
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+  @media(max-width:900px) { .grid2,.grid3 { grid-template-columns:1fr; } }
+  
+  .mini-card {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:16px; font-size:.85rem;
+  }
+  .mini-card h4 { font-family:'Syne',sans-serif; font-size:.95rem; margin-bottom:8px; color:var(--accent); }
+  
+  .phase-box {
+    display:flex; gap:0; margin:16px 0; overflow-x:auto;
+  }
+  .phase {
+    flex:1; min-width:90px; padding:12px 8px; text-align:center;
+    font-size:.75rem; font-family:'IBM Plex Mono',monospace;
+    background:var(--surface2); border-right:1px solid var(--bg);
+    position:relative; line-height:1.4;
+  }
+  .phase:first-child { border-radius:8px 0 0 8px; }
+  .phase:last-child { border-radius:0 8px 8px 0; border-right:none; }
+  .phase .arrow { position:absolute; right:-12px; top:50%; transform:translateY(-50%); z-index:1; font-size:1rem; color:var(--accent); }
+  
+  .highlight { background:#7c6af733; color:#b8aff7; padding:1px 6px; border-radius:4px; font-family:'IBM Plex Mono',monospace; font-size:.85em; }
+  
+  /* PYQ Section */
+  .pyq-card {
+    background:var(--surface); border:1px solid #f7c66a33;
+    border-radius:12px; padding:24px; margin-bottom:20px;
+  }
+  .pyq-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .pyq-year { font-family:'IBM Plex Mono',monospace; font-size:.75rem; background:#f7c66a20; color:var(--accent2); padding:4px 12px; border-radius:999px; border:1px solid #f7c66a44; }
+  .ans-section { background:var(--surface2); border-radius:8px; padding:16px; margin-top:12px; font-size:.88rem; line-height:1.7; color:#c8cce8; }
+  .ans-label { font-family:'IBM Plex Mono',monospace; font-size:.7rem; color:var(--accent3); margin-bottom:8px; display:block; }
+  
+  /* Collapsible */
+  details { margin:8px 0; }
+  summary {
+    cursor:pointer; padding:12px 16px; background:var(--surface2);
+    border-radius:8px; font-weight:600; color:var(--text);
+    list-style:none; display:flex; align-items:center; justify-content:space-between;
+    font-size:.9rem; user-select:none; border:1px solid var(--border);
+  }
+  summary::-webkit-details-marker { display:none; }
+  summary::after { content:'▾'; color:var(--accent); transition:.3s; }
+  details[open] summary::after { transform:rotate(180deg); }
+  details[open] summary { border-radius:8px 8px 0 0; border-bottom-color:transparent; }
+  .details-body { background:var(--surface2); border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; padding:16px; }
+  
+  #mobile-toggle { display:none; position:fixed; top:16px; left:16px; z-index:200; background:var(--accent); border:none; border-radius:8px; padding:8px 12px; cursor:pointer; color:#fff; font-size:1.2rem; }
+  
+  @media(max-width:768px) {
+    #sidebar { transform:translateX(-100%); }
+    #sidebar.open { transform:translateX(0); }
+    #main { margin-left:0; padding:0 16px 60px; }
+    #hero { padding:40px 16px; margin:0 -16px 32px; }
+    #hero h1 { font-size:2rem; }
+    #mobile-toggle { display:block; }
+  }
+  
+  /* Scrollbar */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--accent); }
+  
+  .progress-bar { position:fixed; top:0; left:280px; right:0; height:3px; background:transparent; z-index:200; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent3)); width:0%; transition:.1s; }
+  @media(max-width:768px) { .progress-bar { left:0; } }
+  
+  .sticky-nav { position:sticky; top:0; background:var(--bg); border-bottom:1px solid var(--border); padding:12px 0; z-index:50; display:flex; gap:10px; overflow-x:auto; margin:0 -40px 24px; padding:12px 40px; }
+  .sticky-nav a { font-family:'IBM Plex Mono',monospace; font-size:.7rem; padding:6px 12px; border-radius:999px; text-decoration:none; white-space:nowrap; border:1px solid; }
+  .sticky-nav a:nth-child(1) { color:#7c6af7; border-color:#7c6af744; }
+  .sticky-nav a:nth-child(2) { color:#f76a9e; border-color:#f76a9e44; }
+  .sticky-nav a:nth-child(3) { color:#6af7c2; border-color:#6af7c244; }
+  .sticky-nav a:nth-child(4) { color:#f7c66a; border-color:#f7c66a44; }
+  .sticky-nav a:nth-child(5) { color:#f76a6a; border-color:#f76a6a44; }
+  .sticky-nav a:nth-child(6) { color:#fff; border-color:#ffffff44; }
+  
+  svg.diagram-svg { width:100%; height:auto; margin:16px 0; }
+  
+  .imp-topic {
+    display:inline-flex; align-items:center; gap:6px;
+    background:#f76a6a15; border:1px solid #f76a6a44; color:#f76a6a;
+    border-radius:6px; padding:3px 10px; font-size:.75rem;
+    font-family:'IBM Plex Mono',monospace; margin:3px;
+  }
+  .imp-topic::before { content:'★'; font-size:.7rem; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="pbar"></div></div>
+<button id="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div id="sidebar-header">
+    <h2>KCS601 / BCS601</h2>
+    <p>Software Engineering — Complete Guide</p>
+  </div>
+  
+  <div class="nav-unit">Quick Nav</div>
+  <a class="nav-link" href="#hero">🏠 Home</a>
+  <a class="nav-link" href="#important">⭐ Important Topics</a>
+  
+  <div class="nav-unit">Unit 1 ⭐⭐</div>
+  <a class="nav-link u1" href="#u1-intro">Introduction to SE</a>
+  <a class="nav-link u1" href="#u1-characteristics">SW Characteristics</a>
+  <a class="nav-link u1" href="#u1-crisis">Software Crisis</a>
+  <a class="nav-link u1" href="#u1-quality">Quality Attributes</a>
+  <a class="nav-link u1" href="#u1-sdlc">SDLC Models</a>
+  <a class="nav-link u1" href="#u1-waterfall">Waterfall Model</a>
+  <a class="nav-link u1" href="#u1-prototype">Prototype Model</a>
+  <a class="nav-link u1" href="#u1-spiral">Spiral Model</a>
+  <a class="nav-link u1" href="#u1-agile">Evolutionary Models</a>
+  
+  <div class="nav-unit">Unit 2 ⭐⭐</div>
+  <a class="nav-link u2" href="#u2-req">Requirement Engineering</a>
+  <a class="nav-link u2" href="#u2-srs">SRS Document</a>
+  <a class="nav-link u2" href="#u2-dfd">DFD & ER Diagrams</a>
+  <a class="nav-link u2" href="#u2-sqa">Software Quality Assurance</a>
+  <a class="nav-link u2" href="#u2-cmm">SEI-CMM Model</a>
+  <a class="nav-link u2" href="#u2-iso">ISO 9000</a>
+  
+  <div class="nav-unit">Unit 3</div>
+  <a class="nav-link u3" href="#u3-design">Software Design Basics</a>
+  <a class="nav-link u3" href="#u3-coupling">Coupling & Cohesion</a>
+  <a class="nav-link u3" href="#u3-design-strategies">Design Strategies</a>
+  <a class="nav-link u3" href="#u3-metrics">Metrics & Measures</a>
+  <a class="nav-link u3" href="#u3-cyclomatic">Cyclomatic Complexity</a>
+  
+  <div class="nav-unit">Unit 4</div>
+  <a class="nav-link u4" href="#u4-testing">Testing Overview</a>
+  <a class="nav-link u4" href="#u4-blackwhite">Black & White Box</a>
+  <a class="nav-link u4" href="#u4-integration">Integration Testing</a>
+  <a class="nav-link u4" href="#u4-static">Static Testing</a>
+  
+  <div class="nav-unit">Unit 5</div>
+  <a class="nav-link u5" href="#u5-maintenance">SW Maintenance</a>
+  <a class="nav-link u5" href="#u5-scm">SCM & CASE Tools</a>
+  <a class="nav-link u5" href="#u5-cocomo">COCOMO Model</a>
+  <a class="nav-link u5" href="#u5-risk">Risk Management</a>
+  
+  <div class="nav-unit">Exam</div>
+  <a class="nav-link pyq" href="#pyq">📄 PYQ Solved (2020-24)</a>
+  <a class="nav-link pyq" href="#formula">📐 Formulas & Quick Rev</a>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+  <div class="sticky-nav">
+    <a href="#u1-intro">Unit 1</a>
+    <a href="#u2-req">Unit 2</a>
+    <a href="#u3-design">Unit 3</a>
+    <a href="#u4-testing">Unit 4</a>
+    <a href="#u5-maintenance">Unit 5</a>
+    <a href="#pyq">PYQ Solved</a>
+  </div>
+  
+  <!-- HERO -->
+  <div id="hero">
+    <h1>Software <span>Engineering</span><br>Complete Study Guide</h1>
+    <p>KCS601 / BCS601 — B.Tech Sem VI — AKTU<br>Detailed notes in English + Hinglish | Exam ke liye poora cover kiya gaya hai 🎯</p>
+    <div class="hero-tags">
+      <span class="tag tag-purple">5 Units</span>
+      <span class="tag tag-pink">PYQ 2020-24 Solved</span>
+      <span class="tag tag-green">Diagrams Included</span>
+      <span class="tag tag-yellow">Unit 1 & 2 Special</span>
+      <span class="tag tag-red">Exam Ready</span>
+    </div>
+  </div>
+  
+  <!-- IMPORTANT TOPICS -->
+  <section class="section" id="important">
+    <div class="card">
+      <div class="card-title">⭐ Most Important Topics — Exam ke liye zaroor padho</div>
+      <div class="prose">
+        <p style="margin-bottom:14px;">Based on last 5 years analysis, ye topics <em>har baar</em> aate hain:</p>
+        <div class="grid2">
+          <div>
+            <p style="color:var(--unit1);font-weight:700;margin-bottom:8px;">Unit 1 & 2 (Most Asked)</p>
+            <span class="imp-topic">Waterfall vs Spiral</span>
+            <span class="imp-topic">SEI-CMM Levels</span>
+            <span class="imp-topic">SRS IEEE Standards</span>
+            <span class="imp-topic">Prototype Model</span>
+            <span class="imp-topic">Software Crisis</span>
+            <span class="imp-topic">Req. Engineering Process</span>
+            <span class="imp-topic">ISO 9000 vs CMM</span>
+            <span class="imp-topic">DFD Levels</span>
+          </div>
+          <div>
+            <p style="color:var(--unit3);font-weight:700;margin-bottom:8px;">Unit 3-5</p>
+            <span class="imp-topic">Coupling & Cohesion Types</span>
+            <span class="imp-topic">Cyclomatic Complexity</span>
+            <span class="imp-topic">Black/White Box Testing</span>
+            <span class="imp-topic">COCOMO Model</span>
+            <span class="imp-topic">Function Point</span>
+            <span class="imp-topic">Risk Management</span>
+            <span class="imp-topic">Integration Testing</span>
+            <span class="imp-topic">Software Maintenance Types</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== UNIT 1 ==================== -->
+  <section class="section" id="unit1">
+    <div class="unit-header">
+      <div class="unit-num u1-bg">01</div>
+      <div class="unit-header-text">
+        <h2>Introduction to Software Engineering</h2>
+        <p>Software characteristics, SDLC models, Crisis — Exam mein sabse zyada aata hai ⭐⭐</p>
+      </div>
+    </div>
+
+    <!-- INTRO TO SE -->
+    <div class="card" id="u1-intro">
+      <div class="card-title">What is Software Engineering?</div>
+      <span class="hinglish">💡 Simple bhasha mein: Software banane ka systematic tarika</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION (IEEE)</strong>
+          Software Engineering is the application of a <strong>systematic, disciplined, and quantifiable approach</strong> to the development, operation, and maintenance of software.
+        </div>
+        <p>Iska matlab hai — software ko sirf "code likhna" nahi hai. Isme planning, designing, testing, aur maintenance sab included hain. Jaise civil engineers bridge banate time proper calculation karte hain, waise hi software engineers bhi software banate time proper process follow karte hain.</p>
+        
+        <div class="def-box green">
+          <strong>🔑 KEY COMPONENTS OF SE</strong>
+          <ul class="styled">
+            <li><strong>Process:</strong> Software development kaise karna hai — steps & methods</li>
+            <li><strong>Methods:</strong> Technical techniques for analysis, design, coding, testing</li>
+            <li><strong>Tools:</strong> CASE tools, IDEs, debuggers — kaam ko automate karne ke liye</li>
+            <li><strong>Quality Focus:</strong> Har step pe quality ensure karna</li>
+          </ul>
+        </div>
+        
+        <p><strong>Generic Software vs Custom Software:</strong></p>
+        <table>
+          <tr><th>Generic Software</th><th>Custom Software</th></tr>
+          <tr><td>Sab ke liye banaya jata hai (MS Word, Photoshop)</td><td>Specific client ke liye (Hospital Management System)</td></tr>
+          <tr><td>Market mein bech sakte hain</td><td>Sirf ek client use karta hai</td></tr>
+          <tr><td>Developer khud requirements decide karta hai</td><td>Client requirements deta hai</td></tr>
+        </table>
+        
+        <div class="important-box">
+          <div class="label">⚠️ EXAM TIP</div>
+          <p>"Define generic software with example" — 2022 paper Q1(a). Answer: Generic software ek aisa software hai jo general market ke liye develop kiya jata hai, jaise MS Office, Tally, VLC Media Player.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOFTWARE CHARACTERISTICS -->
+    <div class="card" id="u1-characteristics">
+      <div class="card-title">Software Components & Characteristics</div>
+      <span class="hinglish">💡 Hardware aur Software mein kya fark hai — ye samajhna zaroori hai</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📦 SOFTWARE COMPONENTS</strong>
+          <ul class="styled">
+            <li><strong>Programs:</strong> Executable code (instructions)</li>
+            <li><strong>Data Structures:</strong> Data ko organize karne ka tarika</li>
+            <li><strong>Documents:</strong> User manuals, technical docs, SRS</li>
+          </ul>
+        </div>
+        
+        <p style="margin-top:16px;font-weight:700;color:var(--text);">Software Characteristics (Hardware se alag kaise hai):</p>
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>1. Software Deteriorates, Doesn't Wear Out</h4>
+            <p>Hardware physically ghis jaata hai (bathtub curve). Software mein physical wear nahi hota, lekin bugs aur environment changes se "deteriorate" hota hai. Isko "wearout" nahi kehte, "change induced failure" kehte hain.</p>
+          </div>
+          <div class="mini-card">
+            <h4>2. Software is Not Manufactured</h4>
+            <p>Software "build" hota hai, "manufacture" nahi. Matlab assembly line pe nahi banta. Har software ek alag intellectual effort hai.</p>
+          </div>
+          <div class="mini-card">
+            <h4>3. Software is Complex</h4>
+            <p>Modern software mein millions of lines of code hoti hai. Complexity manage karna ek bada challenge hai.</p>
+          </div>
+          <div class="mini-card">
+            <h4>4. Software is Custom-Built</h4>
+            <p>Zyada tar software specific needs ke liye banaya jata hai (custom-built), ready-made components pe depend nahi karta (though reuse badhta ja raha hai).</p>
+          </div>
+          <div class="mini-card">
+            <h4>5. Software Doesn't Wear Out (No Spare Parts)</h4>
+            <p>Broken part replace karne jaisi cheez software mein nahi hoti. Bug fix karna ek naya change hai jo naye bugs introduce kar sakta hai.</p>
+          </div>
+          <div class="mini-card">
+            <h4>6. Software is Flexible</h4>
+            <p>Software ko change karna hardware se asaan hai, lekin poorly designed software mein changes mushkil aur expensive ho jaate hain.</p>
+          </div>
+        </div>
+        
+        <div class="diagram">
+          <div class="diagram-title">Hardware Failure Curve vs Software Failure Curve</div>
+<pre style="color:#a8f0c8;">
+ Failure
+ Rate
+   │ Hardware (Bathtub Curve)          Software
+   │                                   
+ H │  ╔══╗                         ╔═══════════════
+ i │  ║  ║                         ║  (ideal)
+ g │  ║  ╚═══════════════╗         ║
+ h │  ║   (wearout zone) ║         ║
+   │  ║                  ╚═══╗     ║  Actual (with changes)
+ L │  ╚═════────────────────────────╚═══╗
+ o │         Time →                      ╚══
+ w └──────────────────────────────────────────→ Time
+   
+   "Software does not wear out, but it deteriorates due to changes"
+</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOFTWARE CRISIS -->
+    <div class="card" id="u1-crisis">
+      <div class="card-title pink">Software Crisis — Kya tha aur kyon hua?</div>
+      <span class="hinglish">💡 1960s-70s mein software projects fail hone lage — yahi software crisis hai</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          Software crisis refers to a set of problems encountered in the development of software in the late 1960s. The demand for software increased drastically, but the ability to develop software did not keep pace.
+        </div>
+        
+        <p><strong>Problems/Symptoms of Software Crisis:</strong></p>
+        <ul class="styled">
+          <li><strong>Cost Overrun:</strong> Budget se zyada kharch ho jaata tha. Projects over budget rehte the.</li>
+          <li><strong>Schedule Overrun:</strong> Deadline miss hoti thi. Projects late deliver hote the.</li>
+          <li><strong>Poor Quality:</strong> Delivered software unreliable, inconsistent hota tha.</li>
+          <li><strong>Poor Maintainability:</strong> Ek baar deliver hone ke baad maintain karna mushkil tha.</li>
+          <li><strong>Increasing Complexity:</strong> Hardware fast advance ho raha tha, software piche reh jaata tha.</li>
+          <li><strong>No Documentation:</strong> Proper documentation nahi hoti thi.</li>
+          <li><strong>User Dissatisfaction:</strong> User ki actual needs poori nahi hoti thi.</li>
+        </ul>
+        
+        <div class="def-box yellow">
+          <strong>💡 CAUSES of Software Crisis</strong>
+          <ul class="styled">
+            <li>Increasing complexity of software problems</li>
+            <li>Lack of adequate training in software engineering</li>
+            <li>Failure to apply proper methods and techniques</li>
+            <li>No systematic approach to development</li>
+            <li>Increasing demand for software (hardware became cheap)</li>
+          </ul>
+        </div>
+        
+        <p><strong>Solution:</strong> Software Engineering discipline emerged as a solution — systematic, disciplined approach to software development.</p>
+        
+        <div class="important-box">
+          <div class="label">⚠️ 2022 PAPER — Q3(a)</div>
+          <p>Explain software characteristics in detail. Discuss the reasons of software crisis.<br><strong>Focus:</strong> 5-6 characteristics + 5-6 causes of crisis = full marks</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUALITY ATTRIBUTES -->
+    <div class="card" id="u1-quality">
+      <div class="card-title green">Software Quality Attributes</div>
+      <span class="hinglish">💡 Good software mein kya hona chahiye — ye quality factors hain</span>
+      <div class="prose">
+        <p><strong>McCall's Quality Factors (Triangle Model):</strong></p>
+        <div class="diagram">
+<pre style="color:#a8f0c8;">
+                    ┌─────────────────┐
+                    │   PRODUCT       │
+                    │   REVISION      │  ← Maintainability
+                    │   (Change)      │    Flexibility
+                    │                 │    Testability
+                    └────────┬────────┘
+                             │
+           ┌─────────────────┼─────────────────┐
+           │                 │                  │
+    ┌──────┴──────┐   ┌──────┴──────┐   ┌──────┴──────┐
+    │  PRODUCT    │   │  PRODUCT    │   │  PRODUCT    │
+    │ OPERATION   │   │ TRANSITION  │   │  REVISION   │
+    │(Use karne  │   │(Platform    │   │(Change karne│
+    │  par)       │   │ change)     │   │  par)       │
+    └─────────────┘   └─────────────┘   └─────────────┘
+    Correctness        Portability        Maintainability
+    Reliability        Reusability        Flexibility
+    Efficiency         Interoperability   Testability
+    Integrity
+    Usability
+</pre>
+        </div>
+        
+        <table>
+          <tr><th>Quality Factor</th><th>Description</th></tr>
+          <tr><td><strong>Correctness</strong></td><td>Software apni defined requirements ko pura karta hai ya nahi</td></tr>
+          <tr><td><strong>Reliability</strong></td><td>Expected functions ko failure ke bina perform karne ki ability</td></tr>
+          <tr><td><strong>Efficiency</strong></td><td>Minimum resources use karke maximum performance</td></tr>
+          <tr><td><strong>Integrity</strong></td><td>Unauthorized access ya changes se protection</td></tr>
+          <tr><td><strong>Usability</strong></td><td>User ke liye kitna asaan hai use karna</td></tr>
+          <tr><td><strong>Maintainability</strong></td><td>Error dhundhna aur fix karna kitna asaan hai</td></tr>
+          <tr><td><strong>Flexibility</strong></td><td>Modify karna kitna asaan hai</td></tr>
+          <tr><td><strong>Testability</strong></td><td>Software ko test karna kitna asaan hai</td></tr>
+          <tr><td><strong>Portability</strong></td><td>Ek environment se doosre mein transfer karna</td></tr>
+          <tr><td><strong>Reusability</strong></td><td>Parts ko doosre applications mein use karna</td></tr>
+          <tr><td><strong>Interoperability</strong></td><td>Doosre systems ke saath kaam karna</td></tr>
+        </table>
+        
+        <div class="def-box">
+          <strong>📝 NON-FUNCTIONAL REQUIREMENTS (NFR)</strong>
+          Quality attributes jo software ke behavior ko define karte hain (functionality nahi):
+          <ul class="styled">
+            <li><strong>Performance:</strong> Response time &lt; 2 seconds</li>
+            <li><strong>Security:</strong> Data encrypted hona chahiye</li>
+            <li><strong>Scalability:</strong> 10,000 concurrent users handle kare</li>
+            <li><strong>Availability:</strong> 99.9% uptime</li>
+            <li><strong>Portability:</strong> Windows aur Linux dono pe chalega</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SDLC -->
+    <div class="card" id="u1-sdlc">
+      <div class="card-title yellow">SDLC — Software Development Life Cycle</div>
+      <span class="hinglish">💡 Software banana ek lifecycle hai — birth se death tak</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          SDLC is a process for planning, creating, testing, and deploying an information system. It defines phases, activities, and deliverables for software development.
+        </div>
+        
+        <div class="phase-box">
+          <div class="phase" style="background:#7c6af720;color:#7c6af7;">Planning<br>📋</div>
+          <div class="phase" style="background:#f76a9e20;color:#f76a9e;">Requirement<br>Analysis<br>📝</div>
+          <div class="phase" style="background:#6af7c220;color:#6af7c2;">System<br>Design<br>🎨</div>
+          <div class="phase" style="background:#f7c66a20;color:#f7c66a;">Coding/<br>Implementation<br>💻</div>
+          <div class="phase" style="background:#f76a6a20;color:#f76a6a;">Testing<br>🧪</div>
+          <div class="phase" style="background:#7c6af720;color:#7c6af7;">Deployment<br>🚀</div>
+          <div class="phase" style="background:#f76a9e20;color:#f76a9e;">Maintenance<br>🔧</div>
+        </div>
+        
+        <p>Each phase produces <strong>deliverables</strong> that go to the next phase. Different SDLC models organize these phases differently.</p>
+      </div>
+    </div>
+
+    <!-- WATERFALL MODEL -->
+    <div class="card" id="u1-waterfall">
+      <div class="card-title">Waterfall Model — Sab se purana SDLC model</div>
+      <span class="hinglish">💡 Paani ki tarah ek phase se doosre mein flow karta hai — wapas nahi ja sakta</span>
+      <div class="prose">
+        <div class="diagram">
+          <div class="diagram-title">Waterfall Model</div>
+<pre style="color:#7c6af7;">
+  ┌──────────────────────────────────────────────┐
+  │            Communication                     │ ← Requirement gathering
+  └──────────────────┬───────────────────────────┘
+                     │ ↓
+  ┌──────────────────────────────────────────────┐
+  │               Planning                       │ ← Scheduling, estimation
+  └──────────────────┬───────────────────────────┘
+                     │ ↓
+  ┌──────────────────────────────────────────────┐
+  │              Modeling (Design)               │ ← Architectural + detailed design
+  └──────────────────┬───────────────────────────┘
+                     │ ↓
+  ┌──────────────────────────────────────────────┐
+  │         Construction (Coding + Testing)      │ ← Code + unit test
+  └──────────────────┬───────────────────────────┘
+                     │ ↓
+  ┌──────────────────────────────────────────────┐
+  │              Deployment                      │ ← Deliver + support
+  └──────────────────────────────────────────────┘
+  
+  Note: Each phase must complete before next begins
+        No going back (or very expensive)
+</pre>
+        </div>
+        
+        <table>
+          <tr><th>Advantages ✅</th><th>Disadvantages ❌</th></tr>
+          <tr><td>Simple aur easy to understand</td><td>Requirements change nahi ho sakti (inflexible)</td></tr>
+          <tr><td>Documentation acchi hoti hai</td><td>Testing bahut late hoti hai</td></tr>
+          <tr><td>Linear process, manage karna asaan</td><td>Working software bahut der se milta hai</td></tr>
+          <tr><td>Small projects ke liye suitable</td><td>Real projects pe rarely applicable</td></tr>
+          <tr><td>Clear milestones</td><td>Customer involvement bahut kam hoti hai</td></tr>
+        </table>
+        
+        <div class="def-box yellow">
+          <strong>🎯 WHEN TO USE WATERFALL?</strong>
+          <ul class="styled">
+            <li>Requirements clearly defined aur stable hon</li>
+            <li>Technology well-understood ho</li>
+            <li>Short duration project</li>
+            <li>Resources available hon</li>
+          </ul>
+        </div>
+        
+        <div class="important-box">
+          <div class="label">⚠️ EXAM TIP</div>
+          <p>Iterative Waterfall = Waterfall mein feedback loops add ho jaate hain. Each phase previous phase ko feedback de sakti hai. 2022 paper Q2(a) mein poochha gaya tha.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROTOTYPE MODEL -->
+    <div class="card" id="u1-prototype">
+      <div class="card-title pink">Prototype Model — Pehle model banao, phir asli</div>
+      <span class="hinglish">💡 Prototype = working model, asli product nahi. User ko dikhao, feedback lo, improve karo</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          Prototyping model mein pehle ek preliminary working model (prototype) build kiya jaata hai. Customer prototype ke saath interact karta hai, feedback deta hai, aur phir final system develop kiya jaata hai.
+        </div>
+        
+        <div class="diagram">
+          <div class="diagram-title">Prototype Model — Iterative Process</div>
+<pre style="color:#f76a9e;">
+  ┌────────────────┐
+  │  Requirements  │
+  │  Gathering     │
+  └───────┬────────┘
+          │
+  ┌───────▼────────┐     ┌──────────────────────────────────┐
+  │  Quick Design  │     │                                  │
+  │  (prototype    ├────►│  Prototype Refinement Loop       │
+  │  design)       │     │                                  │
+  └───────┬────────┘     │  Build → Customer Evaluates →   │
+          │              │  Refine → Rebuild → Evaluate...  │
+  ┌───────▼────────┐     └──────────────────┬───────────────┘
+  │  Build         │                        │
+  │  Prototype     │◄───────────────────────┘
+  └───────┬────────┘
+          │ (when customer satisfied)
+  ┌───────▼────────┐
+  │  Engineer Final│
+  │  Product       │
+  └────────────────┘
+</pre>
+        </div>
+        
+        <table>
+          <tr><th>Types of Prototyping</th><th>Description</th></tr>
+          <tr><td><strong>Throwaway/Rapid</strong></td><td>Sirf requirements samajhne ke liye prototype banao, phir discard karo</td></tr>
+          <tr><td><strong>Evolutionary</strong></td><td>Prototype ko hi gradually final product mein evolve karo</td></tr>
+          <tr><td><strong>Incremental</strong></td><td>Multiple prototypes banao, alag alag features ke liye</td></tr>
+          <tr><td><strong>Extreme</strong></td><td>3 phases: static pages → functional screens → integrate</td></tr>
+        </table>
+        
+        <table>
+          <tr><th>Advantages ✅</th><th>Disadvantages ❌</th></tr>
+          <tr><td>User actively involve hota hai</td><td>Poor documentation ki chance</td></tr>
+          <tr><td>Requirements clearly samajh aati hain</td><td>Time consuming ho sakta hai</td></tr>
+          <tr><td>Errors early mein detect ho jaate hain</td><td>Customer attached ho jaata hai prototype se</td></tr>
+          <tr><td>Good for complex/unclear requirements</td><td>Developer shortcuts lete hain</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- SPIRAL MODEL -->
+    <div class="card" id="u1-spiral">
+      <div class="card-title green">Spiral Model — Risk-Driven Model</div>
+      <span class="hinglish">💡 Boehm ne banaya — risk analysis pe focus. Waterfall + Prototype ka combination</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION (Barry Boehm, 1988)</strong>
+          Spiral model ek risk-driven software development process model hai. Isme software development cycles (spirals) mein hota hai, aur har spiral mein 4 phases hote hain.
+        </div>
+        
+        <div class="diagram">
+          <div class="diagram-title">Spiral Model — 4 Quadrants</div>
+<pre style="color:#6af7c2;">
+                    DETERMINE OBJECTIVES
+                         (Planning)
+         Cumulative         │
+          Cost ↑            │
+                     ┌──────▼──────┐
+                     │  Quadrant 1  │
+          Q4 ◄───────┤  Objectives  ├──────► Q2
+       (Review &     │  Constraints │      (Risk
+       Planning)     │  Alternatives│      Analysis)
+                     └──────────────┘
+                            │
+                     ┌──────▼──────┐
+                     │  Quadrant 3  │
+                     │  Develop &   │
+                     │  Test (next  │
+                     │   level)     │
+                     └─────────────-┘
+
+  Each loop = one complete pass through 4 quadrants
+  
+  Quadrant 1: Determine objectives, alternatives, constraints
+  Quadrant 2: Evaluate alternatives, identify & resolve RISKS
+  Quadrant 3: Develop and verify next-level product
+  Quadrant 4: Plan next phases
+  
+  Inner loops: Concept of operation, requirements, design...
+  Outer loops: Construction, installation, maintenance...
+</pre>
+        </div>
+        
+        <table>
+          <tr><th>Advantages ✅</th><th>Disadvantages ❌</th></tr>
+          <tr><td>Risk management excellent hai</td><td>Complex process hai</td></tr>
+          <tr><td>Large projects ke liye suitable</td><td>Risk analysis expertise needed</td></tr>
+          <tr><td>Flexible — changes accommodate kar sakta hai</td><td>Costly process</td></tr>
+          <tr><td>Customer feedback har iteration mein</td><td>Small projects ke liye overkill</td></tr>
+        </table>
+        
+        <div class="def-box yellow">
+          <strong>🔑 KEY CONCEPT: State of Fire Fighting</strong>
+          Jab ek software organization sirf current crisis/problems ko fix karne mein busy rehti hai, aur future planning ya proactive development nahi hoti, isko "State of Fire Fighting" kehte hain. CMM Level 1 organizations aise hoti hain.
+        </div>
+      </div>
+    </div>
+
+    <!-- EVOLUTIONARY MODELS -->
+    <div class="card" id="u1-agile">
+      <div class="card-title red">Evolutionary & Agile Models</div>
+      <span class="hinglish">💡 Iterative Enhancement, Agile, Scrum — modern development ka basis</span>
+      <div class="prose">
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>Iterative Enhancement Model</h4>
+            <p>Pehle simple version banao, phir iteration ke baad features add karte jao. Har iteration mein: plan → design → code → test.</p>
+            <p style="color:var(--accent3);font-size:.8rem;margin-top:8px;">Use when: Large project, need early delivery</p>
+          </div>
+          <div class="mini-card">
+            <h4>Evolutionary Development</h4>
+            <p>Concurrent development of multiple product versions. 2 types: Exploratory (user ke saath work out karo) aur Throwaway Prototyping (poorly understood parts ko explore karo).</p>
+          </div>
+          <div class="mini-card">
+            <h4>Agile Model</h4>
+            <p>Iterative development + collaboration + responding to change. 4 values: Individuals over processes, Working software over docs, Customer collaboration over contracts, Responding to change over plan.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Scrum Framework</h4>
+            <p>Sprint (2-4 week iterations), Daily Scrum, Sprint Planning, Sprint Review. Roles: Product Owner, Scrum Master, Dev Team. Agile ka most popular implementation.</p>
+          </div>
+        </div>
+        
+        <div class="important-box">
+          <div class="label">📊 COMPARISON TABLE — Exam mein comparison poochhte hain</div>
+          <table>
+            <tr><th>Model</th><th>Best For</th><th>Risk Handling</th><th>Customer Involvement</th></tr>
+            <tr><td>Waterfall</td><td>Clear requirements</td><td>Poor</td><td>Start + End only</td></tr>
+            <tr><td>Prototype</td><td>Unclear requirements</td><td>Moderate</td><td>High (throughout)</td></tr>
+            <tr><td>Spiral</td><td>Large, high-risk</td><td>Excellent</td><td>Each iteration</td></tr>
+            <tr><td>Agile</td><td>Changing requirements</td><td>Good</td><td>Continuous</td></tr>
+            <tr><td>Iterative</td><td>Large projects</td><td>Moderate</td><td>Per iteration</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== UNIT 2 ==================== -->
+  <section class="section" id="unit2">
+    <div class="unit-header">
+      <div class="unit-num u2-bg">02</div>
+      <div class="unit-header-text">
+        <h2>Requirement Engineering & SQA</h2>
+        <p>SRS, DFD, SEI-CMM, ISO 9000 — Unit 2 special hai, carefully padho ⭐⭐</p>
+      </div>
+    </div>
+
+    <!-- REQUIREMENT ENGINEERING -->
+    <div class="card" id="u2-req">
+      <div class="card-title pink">Requirement Engineering Process</div>
+      <span class="hinglish">💡 Software kya karna chahiye — ye define karna requirement engineering hai</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          Requirement Engineering is the process of defining, documenting, and maintaining requirements in the engineering design process. It establishes what the system should do.
+        </div>
+        
+        <div class="diagram">
+          <div class="diagram-title">Requirement Engineering Process</div>
+<pre style="color:#f76a9e;">
+  ┌────────────┐    ┌────────────┐    ┌────────────┐    ┌────────────┐    ┌────────────┐
+  │            │    │            │    │            │    │            │    │            │
+  │ ELICITATION│───►│  ANALYSIS  │───►│SPECIFICATION│───►│ VALIDATION │───►│ MANAGEMENT │
+  │ (Gathering)│    │            │    │   (SRS)     │    │            │    │            │
+  │            │    │            │    │            │    │            │    │            │
+  └────────────┘    └────────────┘    └────────────┘    └────────────┘    └────────────┘
+  
+  What users     Conflicts,     Write SRS     Are reqs     Track changes
+  want? (Kya     ambiguities    document      complete,    to requirements
+  chahiye?)      resolve        (IEEE std.)   consistent?  throughout project
+</pre>
+        </div>
+        
+        <p><strong>1. ELICITATION (Requirements Gathering) Techniques:</strong></p>
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>Interviews</h4>
+            <p>Stakeholders se direct questions. Structured (fixed Q's) ya Unstructured (open-ended). Most common technique.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Questionnaires/Surveys</h4>
+            <p>Written questions distribute karna. Large group se data gather karne ke liye useful. Time efficient.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Observation/Ethnography</h4>
+            <p>User ko kaam karte dekhna (without disturbing). Hidden requirements discover hoti hain.</p>
+          </div>
+          <div class="mini-card">
+            <h4>JAD Sessions</h4>
+            <p>Joint Application Development — users, managers, developers saath milke requirements discuss karte hain.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Prototyping</h4>
+            <p>Working model dikhao → user ko requirements clearly samajh aati hain aur feedback deta hai.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Brainstorming</h4>
+            <p>Group session mein ideas generate karo. No criticism during session. Creative requirements nikalni.</p>
+          </div>
+        </div>
+        
+        <p style="margin-top:16px;"><strong>Types of Requirements:</strong></p>
+        <table>
+          <tr><th>Functional Requirements</th><th>Non-Functional Requirements</th></tr>
+          <tr><td>"System kya karega" — features aur functions</td><td>"System kaisa karega" — quality attributes</td></tr>
+          <tr><td>Login, search, payment process</td><td>Performance, security, usability, reliability</td></tr>
+          <tr><td>SRS mein clearly define hote hain</td><td>Constraints define karte hain</td></tr>
+          <tr><td>Ex: "User login kar sake with username+password"</td><td>Ex: "Login 2 seconds mein hona chahiye"</td></tr>
+        </table>
+        
+        <div class="important-box">
+          <div class="label">⭐ 2024 PAPER QUESTION</div>
+          <p>"Explain Requirement Elicitation techniques in detail" — Ye directly poochhte hain. Upar diye 6 techniques detail mein likhna + diagram banaana = full marks.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEASIBILITY STUDY -->
+    <div class="card">
+      <div class="card-title">Feasibility Study — Project karna chahiye ya nahi?</div>
+      <span class="hinglish">💡 Paisa, time, technology — sab feasible hai ya nahi, ye check karna</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          A feasibility study is a preliminary investigation to determine whether a proposed software project is technically, economically, and operationally feasible.
+        </div>
+        <table>
+          <tr><th>Type</th><th>Question</th><th>Details</th></tr>
+          <tr><td><strong>Technical Feasibility</strong></td><td>Kya technology available hai?</td><td>Hardware, software, skills available hain ya nahi?</td></tr>
+          <tr><td><strong>Economic Feasibility</strong></td><td>Kya financially viable hai?</td><td>Cost-benefit analysis, ROI calculate karna</td></tr>
+          <tr><td><strong>Operational Feasibility</strong></td><td>Kya users accept karenge?</td><td>Organization ke existing systems ke saath compatible?</td></tr>
+          <tr><td><strong>Schedule Feasibility</strong></td><td>Kya time mein deliver ho sakta hai?</td><td>Deadline realistic hai ya nahi?</td></tr>
+          <tr><td><strong>Legal Feasibility</strong></td><td>Koi legal issue toh nahi?</td><td>Copyright, data privacy laws, regulations</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- SRS -->
+    <div class="card" id="u2-srs">
+      <div class="card-title yellow">SRS Document — Software Requirements Specification</div>
+      <span class="hinglish">💡 SRS = Software ka "constitution" — sab kuch yahan likha hota hai</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          SRS (Software Requirements Specification) is a complete description of the behavior of a system to be developed. It describes what the software will do and how it will be expected to perform.
+        </div>
+        
+        <p><strong>Need of SRS (Kyun zaroori hai):</strong></p>
+        <ul class="styled">
+          <li>Developer aur customer ke beech agreement document</li>
+          <li>Project planning, estimation ke liye base</li>
+          <li>Testing ke liye benchmark — test cases SRS se derive hote hain</li>
+          <li>Future maintenance ke liye reference</li>
+          <li>Reduces ambiguity aur misunderstandings</li>
+        </ul>
+        
+        <p style="margin-top:16px;"><strong>IEEE 830 Standard — SRS Document Structure:</strong></p>
+        <div class="diagram">
+<pre style="color:#f7c66a;">
+  SRS Document (IEEE 830)
+  │
+  ├── 1. Introduction
+  │       ├── 1.1 Purpose
+  │       ├── 1.2 Scope
+  │       ├── 1.3 Definitions, Acronyms, Abbreviations
+  │       ├── 1.4 References
+  │       └── 1.5 Overview
+  │
+  ├── 2. Overall Description
+  │       ├── 2.1 Product Perspective
+  │       ├── 2.2 Product Functions
+  │       ├── 2.3 User Characteristics
+  │       ├── 2.4 Constraints
+  │       └── 2.5 Assumptions and Dependencies
+  │
+  ├── 3. Specific Requirements
+  │       ├── 3.1 External Interface Requirements
+  │       ├── 3.2 Functional Requirements
+  │       ├── 3.3 Performance Requirements
+  │       ├── 3.4 Design Constraints
+  │       └── 3.5 Non-functional Requirements
+  │
+  └── 4. Appendices
+</pre>
+        </div>
+        
+        <p><strong>Characteristics of Good SRS:</strong></p>
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>Complete</h4>
+            <p>Saare requirements clearly mention honi chahiye. Kuch bhi miss nahi hona chahiye.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Consistent</h4>
+            <p>Koi do requirements ek doosre ke contradict na karein. No conflicts.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Unambiguous</h4>
+            <p>Har requirement ka sirf ek hi interpretation hona chahiye. Clear language use karna.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Verifiable</h4>
+            <p>Har requirement testable honi chahiye. Prove kiya ja sake ki fulfilled hui ya nahi.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Traceable</h4>
+            <p>Har requirement ko design aur code se link kiya ja sake.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Modifiable</h4>
+            <p>Future changes easily accommodate ho sakein SRS mein.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DFD -->
+    <div class="card" id="u2-dfd">
+      <div class="card-title green">DFD — Data Flow Diagram</div>
+      <span class="hinglish">💡 System mein data kaise flow karta hai — DFD ye dikhata hai</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          A DFD (Data Flow Diagram) is a graphical representation that shows the flow of data through a system. It shows what kind of information will be input to and output from the system, where data will come from and go, and where data will be stored.
+        </div>
+        
+        <p><strong>DFD Symbols:</strong></p>
+        <div class="diagram">
+<pre style="color:#6af7c2;">
+  SYMBOLS (Yourdon/DeMarco Notation):
+  
+  ┌──────────┐                    External Entity
+  │          │    Rectangle       (External users/systems
+  │  Entity  │    (Square)        jo data provide/receive
+  │          │                    karte hain)
+  └──────────┘
+  
+  ╔══════════╗                    Process
+  ║          ║    Circle/Oval     (Data transformation
+  ║ Process  ║                    hoti hai yahaan)
+  ╚══════════╝
+  
+  ═══════════════                 Data Store
+  ║ Data Store ║  Open Rectangle  (Data stored hota hai —
+  ═══════════════                  files, databases)
+  
+  ──────────────►                 Data Flow
+                 Arrow            (Data kahan ja raha hai)
+</pre>
+        </div>
+        
+        <p><strong>DFD Levels:</strong></p>
+        <table>
+          <tr><th>Level</th><th>Name</th><th>Description</th></tr>
+          <tr><td><strong>Level 0</strong></td><td>Context Diagram</td><td>Poora system ek single process. Sirf external entities aur main data flows dikhata hai. Highest abstraction.</td></tr>
+          <tr><td><strong>Level 1</strong></td><td>Level 1 DFD</td><td>Context diagram ko major processes mein break down karo. 3-7 processes typically.</td></tr>
+          <tr><td><strong>Level 2</strong></td><td>Level 2 DFD</td><td>Level 1 ke har process ko aur detail mein break karo. Low-level details.</td></tr>
+        </table>
+        
+        <div class="diagram">
+          <div class="diagram-title">Example: Library System — Level 0 DFD (Context Diagram)</div>
+<pre style="color:#6af7c2;">
+                    Book Request
+  ┌──────────┐ ─────────────────────► ╔══════════════════╗
+  │  Student │                        ║                  ║
+  │ (Member) │ ◄──────────────────── ║  LIBRARY SYSTEM  ║
+  └──────────┘   Book / Status        ║                  ║
+                                      ╚══════════════════╝
+  ┌──────────┐   Book Info                     │
+  │ Librarian│ ─────────────────────►          │
+  │          │ ◄──────────────────── Report    │
+  └──────────┘                                 │
+                                               ▼
+  ┌──────────┐   Book Purchase Order  ┌─────────────┐
+  │ Supplier │ ◄────────────────────── │             │
+  │          │ ──────────────────────► │             │
+  └──────────┘   Books Delivered       └─────────────┘
+</pre>
+        </div>
+        
+        <div class="def-box yellow">
+          <strong>📋 ER DIAGRAM (Entity-Relationship Diagram)</strong>
+          <p>Database design ke liye use hota hai. Entities, attributes, aur relationships dikhata hai.</p>
+          <ul class="styled">
+            <li><strong>Entity:</strong> Rectangle — real-world object (Student, Book)</li>
+            <li><strong>Attribute:</strong> Oval — entity ki property (StudentID, Name)</li>
+            <li><strong>Relationship:</strong> Diamond — entities ke beech link (Borrows)</li>
+            <li><strong>Cardinality:</strong> 1:1, 1:N, M:N relationships</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SQA -->
+    <div class="card" id="u2-sqa">
+      <div class="card-title red">Software Quality Assurance (SQA)</div>
+      <span class="hinglish">💡 Quality ensure karna — sirf testing nahi, poora process quality focus hai</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          SQA is a set of activities for ensuring quality in software engineering processes. It focuses on the <strong>process</strong> (not just the product) to ensure that quality software is built.
+        </div>
+        
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>Verification vs Validation</h4>
+            <p><strong>Verification:</strong> "Are we building the product right?" — Process check. Are we following standards?<br><br>
+            <strong>Validation:</strong> "Are we building the right product?" — Product check. Does it meet user needs?<br><br>
+            <em style="color:var(--accent3);">Simple: Verification = internal process check. Validation = external user satisfaction check.</em></p>
+          </div>
+          <div class="mini-card">
+            <h4>SQA Activities</h4>
+            <ul class="styled">
+              <li>SQA Plan preparation</li>
+              <li>Formal Technical Reviews (FTR)</li>
+              <li>Multi-library coding standards</li>
+              <li>Process monitoring and controlling</li>
+              <li>Testing strategies and procedures</li>
+              <li>Change control management</li>
+              <li>SQA record keeping</li>
+            </ul>
+          </div>
+        </div>
+        
+        <p style="margin-top:14px;"><strong>SQA Framework consists of:</strong></p>
+        <ul class="styled">
+          <li><strong>Standards:</strong> IEEE, ISO standards for software processes</li>
+          <li><strong>Reviews and Audits:</strong> Formal technical reviews, walkthroughs</li>
+          <li><strong>Testing:</strong> Unit, integration, system testing</li>
+          <li><strong>Error collection and analysis:</strong> Track defects systematically</li>
+          <li><strong>Change management:</strong> Control changes systematically</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SEI-CMM -->
+    <div class="card" id="u2-cmm">
+      <div class="card-title">SEI-CMM Model — Capability Maturity Model</div>
+      <span class="hinglish">💡 Organisation ki software maturity kitni hai — 5 levels mein measure karta hai</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          The SEI-CMM (Software Engineering Institute — Capability Maturity Model) is a framework for assessing and improving software processes. It was developed by Carnegie Mellon University's SEI (Software Engineering Institute) for the US Department of Defense.
+        </div>
+        
+        <div class="diagram">
+          <div class="diagram-title">SEI-CMM — 5 Maturity Levels</div>
+<pre style="color:#7c6af7;">
+  Level 5 ║████████████████████████████████╗ OPTIMIZING
+          ║ Focus: Continuous improvement   ║ (Best!)
+          ║ Defect prevention, tech changes  ║
+  ────────╫─────────────────────────────────╣
+  Level 4 ║██████████████████████████╗      ║ MANAGED
+          ║ Focus: Quantitative mgmt  ║      ║ (Predictable)
+          ║ Software process measured ║      ║
+  ────────╫──────────────────────────╣      ║
+  Level 3 ║████████████████████╗     ║      ║ DEFINED
+          ║ Focus: Process def.  ║    ║      ║ (Consistent)
+          ║ Documented standards ║    ║      ║
+  ────────╫─────────────────────╣    ║      ║
+  Level 2 ║██████████████╗      ║    ║      ║ REPEATABLE
+          ║ Focus: Project mgmt  ║   ║    ║      ║ (Disciplined)
+          ║ Basic tracking       ║    ║      ║
+  ────────╫──────────────╣       ║    ║      ║
+  Level 1 ║████████╗     ║       ║    ║      ║ INITIAL
+          ║ Chaotic  ║   ║       ║    ║      ║ (Unpredictable)
+          ║ Ad-hoc   ║   ║       ║    ║      ║
+          ╚══════════╝   ╚═══════╝    ╚══════╝═══════════
+                         Maturity →
+</pre>
+        </div>
+        
+        <table>
+          <tr><th>Level</th><th>Name</th><th>Characteristics</th><th>Key Process Areas</th></tr>
+          <tr><td><strong>1</strong></td><td>Initial</td><td>Chaotic, ad-hoc, "Fire fighting" mode. Success depends on individuals.</td><td>None defined</td></tr>
+          <tr><td><strong>2</strong></td><td>Repeatable</td><td>Basic project management. Past experiences guide new projects.</td><td>Requirements Mgmt, Project Planning, QA, CM</td></tr>
+          <tr><td><strong>3</strong></td><td>Defined</td><td>Documented, standardized processes for entire organization.</td><td>Training, Process Definition, Peer Reviews</td></tr>
+          <tr><td><strong>4</strong></td><td>Managed</td><td>Quantitative measures. Software quality measured statistically.</td><td>Software Quality Mgmt, Quantitative Process Mgmt</td></tr>
+          <tr><td><strong>5</strong></td><td>Optimizing</td><td>Continuous process improvement. Defect prevention, technology change.</td><td>Defect Prevention, Technology Change, Process Change</td></tr>
+        </table>
+        
+        <div class="def-box yellow">
+          <strong>💡 STATE OF FIRE FIGHTING (Level 1)</strong>
+          CMM Level 1 organizations are in "Fire Fighting" mode — they react to crises instead of managing them. No documented processes, success depends on individual heroics, not processes. Every project feels like putting out a fire.
+        </div>
+        
+        <div class="important-box">
+          <div class="label">⭐ EXAM — 2022 Q4(a) + 2024 Q4(b)</div>
+          <p>SEI-CMM model explain karna + 5 levels detail mein + "State of Fire Fighting" kya hai. Yahan diya gaya content ek baar acche se memorize karo — 10 marks ka answer.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ISO 9000 -->
+    <div class="card" id="u2-iso">
+      <div class="card-title pink">ISO 9000 Model & Comparison with CMM</div>
+      <span class="hinglish">💡 International quality standard — ek certificate hai jo quality ensure karta hai</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 ISO 9000</strong>
+          ISO 9000 is a set of international standards for quality management systems. It focuses on ensuring that organizations have quality processes in place, not just quality products.
+        </div>
+        
+        <table>
+          <tr><th>SEI-CMM</th><th>ISO 9000</th></tr>
+          <tr><td>Software process improvement model</td><td>Quality management standard</td></tr>
+          <tr><td>5 maturity levels</td><td>Certification based (yes/no)</td></tr>
+          <tr><td>US DoD ke liye develop kiya gaya</td><td>International standard (all industries)</td></tr>
+          <tr><td>Software specific hai</td><td>Any industry apply kar sakti hai</td></tr>
+          <tr><td>Process improvement focus</td><td>Quality system documentation focus</td></tr>
+          <tr><td>More prescriptive (specific guidance)</td><td>More generic (principles based)</td></tr>
+          <tr><td>Assessment based</td><td>Audit/Registration based</td></tr>
+        </table>
+        
+        <p style="margin-top:12px;"><strong>ISO 9000 Key Principles:</strong></p>
+        <ul class="styled">
+          <li>Customer focus — customer ki needs samajhna</li>
+          <li>Leadership — quality culture create karna</li>
+          <li>Process approach — activities ko processes mein manage karna</li>
+          <li>Continual improvement — har cheez ko better karte rehna</li>
+          <li>Evidence-based decision making — data se decisions lena</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== UNIT 3 ==================== -->
+  <section class="section" id="unit3">
+    <div class="unit-header">
+      <div class="unit-num u3-bg">03</div>
+      <div class="unit-header-text">
+        <h2>Software Design & Metrics</h2>
+        <p>Coupling, Cohesion, Design Strategies, Cyclomatic Complexity</p>
+      </div>
+    </div>
+
+    <div class="card" id="u3-design">
+      <div class="card-title green">Basic Concepts of Software Design</div>
+      <span class="hinglish">💡 Design = blueprint banana, jaise architect ghar ka map banata hai</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 SOFTWARE DESIGN</strong>
+          Software design is the process of defining the architecture, components, modules, interfaces, and data for a system to satisfy specified requirements. Design transforms requirements into a blueprint for constructing software.
+        </div>
+        
+        <p><strong>Design Framework — Roger Pressman ke anusar:</strong></p>
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>Architectural Design (High-Level)</h4>
+            <p>System ka overall structure. Major components/subsystems aur unke relationships. External interfaces. "What" — kya components honge.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Low-Level Design (Detailed)</h4>
+            <p>Component/module ke andar ki details. Algorithms, data structures, interfaces. "How" — har component kaise kaam karega.</p>
+          </div>
+        </div>
+        
+        <p style="margin-top:14px;"><strong>Principles of Good Software Design:</strong></p>
+        <ul class="styled">
+          <li><strong>Abstraction:</strong> Complex details ko hide karo, sirf essential information dikhao</li>
+          <li><strong>Modularity:</strong> System ko small, manageable modules mein divide karo</li>
+          <li><strong>Information Hiding:</strong> Module ki internal details doosre modules se hide karo</li>
+          <li><strong>Stepwise Refinement:</strong> Top se bottom level tak gradually detail karo</li>
+          <li><strong>High Cohesion:</strong> Ek module mein related functions rakhna</li>
+          <li><strong>Low Coupling:</strong> Modules ke beech minimum dependence</li>
+          <li><strong>Simplicity:</strong> Simple design prefer karo — complex se bachna</li>
+        </ul>
+        
+        <p style="margin-top:14px;"><strong>Design Tools:</strong></p>
+        <table>
+          <tr><th>Tool</th><th>Purpose</th></tr>
+          <tr><td>Structure Charts</td><td>Module hierarchy aur data flow dikhata hai</td></tr>
+          <tr><td>Pseudo Code</td><td>Algorithm describe karna — programming language se independent</td></tr>
+          <tr><td>Flow Charts</td><td>Control flow dikhata hai — decisions, loops</td></tr>
+          <tr><td>UML Diagrams</td><td>OO design ke liye — class, sequence, use case diagrams</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" id="u3-coupling">
+      <div class="card-title yellow">Coupling & Cohesion — Most Important Topic!</div>
+      <span class="hinglish">💡 Coupling = modules ka inter-dependence | Cohesion = ek module ke andar relatedness</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>🎯 GOAL: Low Coupling + High Cohesion = Good Design</strong>
+          Low coupling matlab modules ek doosre pe kam depend karein. High cohesion matlab ek module ke andar sari cheezein ek kaam se related hon.
+        </div>
+        
+        <p><strong>COUPLING — Types (Best to Worst Order):</strong></p>
+        <table>
+          <tr><th>Type</th><th>Level</th><th>Description</th><th>Example</th></tr>
+          <tr><td><strong>Data Coupling</strong></td><td>Best ✅</td><td>Modules sirf simple data parameters share karte hain</td><td>Function ek integer leti hai, result return karti hai</td></tr>
+          <tr><td><strong>Stamp Coupling</strong></td><td>Good</td><td>Modules entire data structure share karte hain</td><td>Poora student record pass karna, sirf naam chahiye tha</td></tr>
+          <tr><td><strong>Control Coupling</strong></td><td>Medium</td><td>Ek module doosre ke flow ko control karta hai (flag pass karna)</td><td>Boolean flag pass karke behavior control karna</td></tr>
+          <tr><td><strong>External Coupling</strong></td><td>Bad</td><td>Modules external tools, shared formats pe depend karte hain</td><td>Same external file format pe depend karna</td></tr>
+          <tr><td><strong>Common Coupling</strong></td><td>Bad ❌</td><td>Multiple modules global data share karte hain</td><td>Global variables use karna</td></tr>
+          <tr><td><strong>Content Coupling</strong></td><td>Worst ❌❌</td><td>Ek module doosre module ke internal code access karta hai</td><td>GOTO statement to another module</td></tr>
+        </table>
+        
+        <p style="margin-top:16px;"><strong>COHESION — Types (Best to Worst Order):</strong></p>
+        <table>
+          <tr><th>Type</th><th>Level</th><th>Description</th></tr>
+          <tr><td><strong>Functional Cohesion</strong></td><td>Best ✅</td><td>Module sirf ek specific task perform karta hai. "Calculate Square Root" — sirf yahi kaam karta hai.</td></tr>
+          <tr><td><strong>Sequential Cohesion</strong></td><td>Good</td><td>Module ke elements sequentially related hain — ek ka output doosre ka input hai.</td></tr>
+          <tr><td><strong>Communicational Cohesion</strong></td><td>Good</td><td>Same data pe operate karte hain module ke sare functions.</td></tr>
+          <tr><td><strong>Procedural Cohesion</strong></td><td>Medium</td><td>Ek activity ko complete karne ke liye steps execute karna.</td></tr>
+          <tr><td><strong>Temporal Cohesion</strong></td><td>Medium</td><td>Same time pe execute hone wale functions ek saath (initialization functions).</td></tr>
+          <tr><td><strong>Logical Cohesion</strong></td><td>Bad</td><td>Similar category ke activities lekin actually unrelated (print all reports).</td></tr>
+          <tr><td><strong>Coincidental Cohesion</strong></td><td>Worst ❌❌</td><td>Koi logical relationship nahi — randomly grouped functions.</td></tr>
+        </table>
+        
+        <div class="important-box">
+          <div class="label">⭐ MEMORY TRICK</div>
+          <p><strong>Coupling (Best→Worst):</strong> Data → Stamp → Control → External → Common → Content<br>
+          Yaad karo: "<strong>D</strong>inesh <strong>S</strong>e <strong>C</strong>hair <strong>E</strong>k <strong>C</strong>ommon <strong>C</strong>hhodega"</p>
+          <p style="margin-top:8px;"><strong>Cohesion (Best→Worst):</strong> Functional → Sequential → Communicational → Procedural → Temporal → Logical → Coincidental<br>
+          Yaad karo: "<strong>F</strong>or <strong>S</strong>uccessful <strong>C</strong>ode, <strong>P</strong>ractice <strong>T</strong>echnique, <strong>L</strong>earn <strong>C</strong>ontinuously"</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="u3-design-strategies">
+      <div class="card-title red">Design Strategies — Function Oriented vs Object Oriented</div>
+      <div class="prose">
+        <table>
+          <tr><th>Function-Oriented Design (FOD)</th><th>Object-Oriented Design (OOD)</th></tr>
+          <tr><td>System ko functions/procedures mein break karo</td><td>System ko objects (data + behavior) mein break karo</td></tr>
+          <tr><td>DFD use karta hai design ke liye</td><td>UML diagrams (Class, Sequence) use karta hai</td></tr>
+          <tr><td>Top-down approach</td><td>Bottom-up ya middle-out approach</td></tr>
+          <tr><td>Data aur functions alag hote hain</td><td>Data aur functions ek saath (encapsulation)</td></tr>
+          <tr><td>C, Pascal, COBOL mein implement</td><td>Java, C++, Python mein implement</td></tr>
+          <tr><td>Simpler to understand initially</td><td>Reusability, maintainability better</td></tr>
+        </table>
+        
+        <div class="def-box green">
+          <strong>🔑 TOP-DOWN vs BOTTOM-UP</strong>
+          <p><strong>Top-Down:</strong> High-level functions se start karo, gradually decompose karo into smaller modules. Waterfall se related.<br>
+          <strong>Bottom-Up:</strong> Small, simple modules se start karo, combine karke complex system banao. Component reuse better.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="u3-metrics">
+      <div class="card-title">Software Metrics — Size aur Complexity Measure karna</div>
+      <div class="prose">
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>LOC (Lines of Code)</h4>
+            <p>Code ki lines count karo. Simple but language-dependent. Problems: Comments, blank lines, style differences affect count.</p>
+            <p style="color:var(--accent3);margin-top:8px;font-size:.85rem;">Advantages: Easy to measure<br>Disadvantages: Language dependent, not a good quality measure</p>
+          </div>
+          <div class="mini-card">
+            <h4>Function Point (FP)</h4>
+            <p>Language-independent size measure. User-visible functionality count karo.</p>
+            <p style="color:var(--accent3);margin-top:8px;font-size:.85rem;"><strong>Components:</strong> External Inputs, External Outputs, External Inquiries, Internal Logic Files, External Interface Files</p>
+          </div>
+        </div>
+        
+        <p style="margin-top:14px;"><strong>Function Point Calculation:</strong></p>
+        <div class="code-block">
+FP = UFC × (0.65 + 0.01 × ΣFi)
+
+Where:
+  UFC = Unadjusted Function Count
+      = Σ(count × weight) for each component type
+  Fi  = 14 General System Characteristics (0-5 each)
+  
+UFC Weights:
+  External Inputs:          Simple=3, Average=4, Complex=6
+  External Outputs:         Simple=4, Average=5, Complex=7
+  External Inquiries:       Simple=3, Average=4, Complex=6
+  Internal Logical Files:   Simple=7, Average=10, Complex=15
+  External Interface Files: Simple=5, Average=7, Complex=10
+        </div>
+        
+        <div class="def-box yellow">
+          <strong>📐 HALSTEAD'S SOFTWARE SCIENCE</strong>
+          Measures based on operators and operands in code.
+          <ul class="styled">
+            <li>n1 = distinct operators, n2 = distinct operands</li>
+            <li>N1 = total operators, N2 = total operands</li>
+            <li>Vocabulary: n = n1 + n2</li>
+            <li>Length: N = N1 + N2</li>
+            <li>Volume: V = N × log₂(n)</li>
+            <li>Difficulty: D = (n1/2) × (N2/n2)</li>
+            <li>Effort: E = D × V</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="u3-cyclomatic">
+      <div class="card-title pink">Cyclomatic Complexity — Code ki complexity measure karna</div>
+      <span class="hinglish">💡 McCabe ne 1976 mein diya — code mein independent paths kitne hain</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          Cyclomatic Complexity is a quantitative measure of the number of linearly independent paths through a program's source code. Higher value = more complex = more testing needed.
+        </div>
+        
+        <p><strong>3 Methods to Calculate:</strong></p>
+        <div class="code-block">
+Method 1: V(G) = E - N + 2
+  Where E = number of edges, N = number of nodes
+
+Method 2: V(G) = Number of regions in control flow graph
+  (Count enclosed areas + 1 for outside region)
+
+Method 3: V(G) = P + 1
+  Where P = number of predicate/decision nodes
+  (nodes with more than one exit)
+        </div>
+        
+        <p><strong>Example from 2022 Paper (Q6a):</strong></p>
+        <div class="code-block" style="color:#f7c66a;">
+Code:
+  IF A = 100
+    THENIF B > C
+      THEN A = B
+      ELSE A = C
+    ENDIF
+  ENDIF
+  PRINT A
+
+Control Flow Graph Nodes:
+  1: Start + IF A=100
+  2: IF B>C
+  3: A = B  
+  4: A = C
+  5: PRINT A + End
+
+Edges: 1→2, 1→5, 2→3, 2→4, 3→5, 4→5
+
+Method 1: V(G) = E - N + 2 = 6 - 5 + 2 = 3
+Method 3: P = 2 (two IF conditions) → V(G) = 2 + 1 = 3
+
+Independent Paths:
+  Path 1: 1→5 (A≠100)
+  Path 2: 1→2→3→5 (A=100, B>C)
+  Path 3: 1→2→4→5 (A=100, B≤C)
+
+Cyclomatic Complexity = 3
+        </div>
+        
+        <table>
+          <tr><th>CC Value</th><th>Risk Level</th><th>Action</th></tr>
+          <tr><td>1-10</td><td>Low</td><td>Simple, testable code</td></tr>
+          <tr><td>11-20</td><td>Medium</td><td>Moderate complexity</td></tr>
+          <tr><td>21-50</td><td>High</td><td>Complex, risky</td></tr>
+          <tr><td>&gt;50</td><td>Very High</td><td>Untestable, refactor karo</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== UNIT 4 ==================== -->
+  <section class="section" id="unit4">
+    <div class="unit-header">
+      <div class="unit-num u4-bg">04</div>
+      <div class="unit-header-text">
+        <h2>Software Testing</h2>
+        <p>Black Box, White Box, Integration, Static Testing — Testing strategies</p>
+      </div>
+    </div>
+
+    <div class="card" id="u4-testing">
+      <div class="card-title yellow">Testing Overview & Objectives</div>
+      <span class="hinglish">💡 Testing = errors dhundhna, correct karna. "Testing shows presence of bugs, not absence"</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 Testing Objectives (Dijkstra)</strong>
+          Testing is the process of executing a program with the intent of <strong>finding errors</strong>. A good test case is one that has a high probability of finding an undiscovered error. A successful test is one that finds an error.
+        </div>
+        
+        <p><strong>Testing Levels:</strong></p>
+        <div class="phase-box">
+          <div class="phase" style="background:#7c6af720;color:#7c6af7;">Unit<br>Testing<br>(Module)</div>
+          <div class="phase" style="background:#f76a9e20;color:#f76a9e;">Integration<br>Testing<br>(Modules+)</div>
+          <div class="phase" style="background:#6af7c220;color:#6af7c2;">System<br>Testing<br>(Complete)</div>
+          <div class="phase" style="background:#f7c66a20;color:#f7c66a;">Acceptance<br>Testing<br>(User)</div>
+          <div class="phase" style="background:#f76a6a20;color:#f76a6a;">Regression<br>Testing<br>(After change)</div>
+        </div>
+        
+        <table>
+          <tr><th>Testing Type</th><th>Purpose</th><th>Who Does It?</th></tr>
+          <tr><td><strong>Unit Testing</strong></td><td>Individual module/function test karna</td><td>Developer</td></tr>
+          <tr><td><strong>Integration Testing</strong></td><td>Combined modules test karna</td><td>Dev/Test team</td></tr>
+          <tr><td><strong>System Testing</strong></td><td>Complete system as a whole test karna</td><td>Test team</td></tr>
+          <tr><td><strong>Acceptance Testing</strong></td><td>Customer requirements satisfy hote hain ya nahi</td><td>Customer/User</td></tr>
+          <tr><td><strong>Regression Testing</strong></td><td>Changes ke baad existing functionality still works</td><td>Dev/Test team</td></tr>
+          <tr><td><strong>Performance Testing</strong></td><td>Speed, load, stress test karna</td><td>Test team</td></tr>
+        </table>
+        
+        <div class="def-box green">
+          <strong>🔑 STUBS vs DRIVERS</strong>
+          <p><strong>Stub:</strong> Ek dummy module jo called module ka role play karta hai. Top-Down integration mein use hota hai. Lower level modules ke liye substitute.</p>
+          <p><strong>Driver:</strong> Ek dummy module jo calling module ka role play karta hai. Bottom-Up integration mein use hota hai. Upper level modules ke liye substitute.</p>
+        </div>
+        
+        <div class="def-box yellow">
+          <strong>🔑 ALPHA vs BETA TESTING</strong>
+          <p><strong>Alpha Testing:</strong> Developer ke site pe end users ke saath testing. Controlled environment. Developer present hota hai bugs fix ke liye.</p>
+          <p><strong>Beta Testing:</strong> Customers ki sites pe, real environment mein. Developer present nahi. Customer real usage mein bugs report karta hai. Release se pehle ka final testing.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="u4-blackwhite">
+      <div class="card-title">Black Box vs White Box Testing</div>
+      <div class="prose">
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>⬛ Black Box Testing (Functional)</h4>
+            <p>Internal code ka knowledge nahi — sirf input/output test karte hain. "What it does" test karna. Also called Behavioral testing.</p>
+            <ul class="styled">
+              <li><strong>Equivalence Partitioning:</strong> Input domain ko classes mein divide karo, har class se ek test case</li>
+              <li><strong>Boundary Value Analysis:</strong> Boundary values (edges) pe test karo</li>
+              <li><strong>Decision Table Testing:</strong> Conditions aur actions table mein</li>
+              <li><strong>Cause-Effect Graphing</strong></li>
+            </ul>
+          </div>
+          <div class="mini-card">
+            <h4>⬜ White Box Testing (Structural)</h4>
+            <p>Internal code structure ka knowledge hai. "How it does" test karna. Also called Glass Box/Clear Box testing.</p>
+            <ul class="styled">
+              <li><strong>Statement Coverage:</strong> Har statement kam se kam ek baar execute ho</li>
+              <li><strong>Branch Coverage:</strong> Har branch (if/else) test ho</li>
+              <li><strong>Path Coverage:</strong> Har independent path test ho</li>
+              <li><strong>Condition Coverage:</strong> Har condition T aur F dono ho</li>
+            </ul>
+          </div>
+        </div>
+        
+        <p style="margin-top:14px;"><strong>Boundary Value Analysis Example:</strong></p>
+        <div class="def-box green">
+          <strong>Example:</strong> Program reads integer [1, 100]<br>
+          BVC Test Cases: 0 (just below min), 1 (min), 2 (just above min), 50 (nominal), 99 (just below max), 100 (max), 101 (just above max)<br>
+          Robust BVC adds: -1 (below min-1), 102 (above max+1) — <em>from 2024 paper Q6(a)</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="u4-integration">
+      <div class="card-title pink">Integration Testing Approaches</div>
+      <span class="hinglish">💡 Modules combine karke test karna — kaise karein?</span>
+      <div class="prose">
+        <table>
+          <tr><th>Approach</th><th>How?</th><th>Requires</th><th>Pros/Cons</th></tr>
+          <tr><td><strong>Big Bang</strong></td><td>Sab modules ek saath integrate karo</td><td>Nothing special</td><td>Simple but difficult to debug</td></tr>
+          <tr><td><strong>Top-Down</strong></td><td>High-level modules pehle, lower mein ja rahe hain</td><td>Stubs</td><td>Early prototype possible, stubs complex</td></tr>
+          <tr><td><strong>Bottom-Up</strong></td><td>Low-level modules pehle, upar ki taraf ja rahe hain</td><td>Drivers</td><td>Actual modules use, no early UI test</td></tr>
+          <tr><td><strong>Sandwich/Mixed</strong></td><td>Top-down + Bottom-up simultaneously</td><td>Both</td><td>Faster but complex</td></tr>
+          <tr><td><strong>Regression</strong></td><td>Changes ke baad existing tests re-run</td><td>Test suite</td><td>Ensures changes don't break things</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" id="u4-static">
+      <div class="card-title green">Static Testing — Code Run Kiye Bina Testing</div>
+      <span class="hinglish">💡 Code actually run nahi hota — sirf review karte hain</span>
+      <div class="prose">
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>Walkthrough</h4>
+            <p>Author code present karta hai team ko. Informal review. Team suggestions deti hai. Author ka code walk through karna. Low overhead, educational.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Code Inspection</h4>
+            <p>Formal process. Moderator, author, reviewers, recorder roles hote hain. Checklist se defects dhundhte hain. Most effective static testing technique.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Formal Technical Review (FTR)</h4>
+            <p>Structured review. 3-5 people, 2 hours max per session. Meeting, recording, follow-up. Defects categorize kiye jaate hain.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Peer Reviews</h4>
+            <p>Fellow developers ek doosre ka code review karte hain. Less formal. Pair programming bhi ek form hai. Knowledge sharing bhi hoti hai.</p>
+          </div>
+        </div>
+        
+        <div class="def-box">
+          <strong>📝 MUTATION TESTING</strong>
+          Test cases ki effectiveness measure karne ke liye mutants (slightly wrong versions of program) banate hain. Agar test cases mutants ko detect kar lein, toh test cases achhe hain.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== UNIT 5 ==================== -->
+  <section class="section" id="unit5">
+    <div class="unit-header">
+      <div class="unit-num u5-bg">05</div>
+      <div class="unit-header-text">
+        <h2>Software Maintenance & Project Management</h2>
+        <p>COCOMO, Risk Management, SCM, CASE Tools</p>
+      </div>
+    </div>
+
+    <div class="card" id="u5-maintenance">
+      <div class="card-title red">Software Maintenance</div>
+      <span class="hinglish">💡 Software deliver hone ke baad bhi kaam baaki hai — maintenance!</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          Software maintenance is the modification of software after delivery to correct faults, improve performance, or adapt the product to a changed environment.
+        </div>
+        
+        <p><strong>Categories of Maintenance (Lientz & Swanson):</strong></p>
+        <table>
+          <tr><th>Type</th><th>Description</th><th>% of Maintenance Work</th></tr>
+          <tr><td><strong>Corrective</strong></td><td>Bugs fix karna. Software errors correct karna. "Something is broken"</td><td>~17%</td></tr>
+          <tr><td><strong>Adaptive</strong></td><td>Changed environment ke liye modify karna. New OS, new hardware. "Environment changed"</td><td>~18%</td></tr>
+          <tr><td><strong>Perfective</strong></td><td>Performance improve karna, new features add karna. "Make it better"</td><td>~60%</td></tr>
+          <tr><td><strong>Preventive</strong></td><td>Future maintenance easier karna. Code restructure, documentation improve. "Avoid future problems"</td><td>~5%</td></tr>
+        </table>
+        
+        <div class="important-box">
+          <div class="label">⭐ ADAPTIVE MAINTENANCE (2022 Q1j)</div>
+          <p>Adaptive maintenance means modifying software to accommodate changes in the environment. Example: Software jo Windows XP pe tha, usse Windows 10 pe run karne ke liye modify karna.</p>
+        </div>
+        
+        <p style="margin-top:14px;"><strong>Software Re-Engineering vs Reverse Engineering:</strong></p>
+        <table>
+          <tr><th>Re-Engineering</th><th>Reverse Engineering</th></tr>
+          <tr><td>Old software ko new technology mein rebuild karna</td><td>Existing software se design/requirements recover karna</td></tr>
+          <tr><td>Forward direction (new code)</td><td>Backward direction (understand existing code)</td></tr>
+          <tr><td>Improve functionality + structure</td><td>Understand karna (no necessarily change)</td></tr>
+          <tr><td>Complete system replacement possible</td><td>Source code → design documents</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" id="u5-scm">
+      <div class="card-title">SCM — Software Configuration Management</div>
+      <span class="hinglish">💡 Software ke versions manage karna — changes track karna</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          SCM (Software Configuration Management) is the task of tracking and controlling changes in the software. It helps manage multiple versions of software and ensures that changes are properly controlled.
+        </div>
+        
+        <p><strong>SCM Activities:</strong></p>
+        <ul class="styled">
+          <li><strong>Configuration Identification:</strong> Configuration items (CIs) identify karna — what to control</li>
+          <li><strong>Version Control:</strong> Multiple versions track karna. Git, SVN, CVS tools use hote hain.</li>
+          <li><strong>Change Control:</strong> Changes formally review aur approve karna. Change Control Board (CCB) hota hai.</li>
+          <li><strong>Configuration Audit:</strong> Ensure karna ki software configuration correct hai</li>
+          <li><strong>Status Accounting:</strong> CIs ke status aur history record karna</li>
+        </ul>
+        
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>Version Control</h4>
+            <p>Software ke different versions manage karna. Revision numbers (1.0, 1.1, 2.0). Branching aur merging. Rollback possible. Tools: Git, SVN, Mercurial.</p>
+          </div>
+          <div class="mini-card">
+            <h4>CASE Tools</h4>
+            <p><strong>CASE = Computer Aided Software Engineering</strong><br>Software development automate karne ke tools.<br>Upper CASE: Requirement analysis, design<br>Lower CASE: Coding, testing, maintenance<br>I-CASE: Integrated upper + lower</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="u5-cocomo">
+      <div class="card-title pink">COCOMO Model — Cost Estimation</div>
+      <span class="hinglish">💡 Barry Boehm ka model — LOC se effort aur time estimate karo</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 COCOMO (COnstructive COst MOdel)</strong>
+          COCOMO is an algorithmic software cost estimation model developed by Barry Boehm in 1981. It uses a regression formula with parameters derived from historical project data.
+        </div>
+        
+        <p><strong>COCOMO Types:</strong></p>
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>1. Basic COCOMO</h4>
+            <p>Simple, static formula. LOC se effort aur time calculate.</p>
+            <code style="color:var(--accent3);font-family:'IBM Plex Mono',monospace;font-size:.85rem;">
+            E = a × (KLOC)^b<br>
+            D = c × E^d</code>
+          </div>
+          <div class="mini-card">
+            <h4>2. Intermediate COCOMO</h4>
+            <p>15 cost driver attributes add karta hai Basic mein. More accurate estimation.</p>
+          </div>
+          <div class="mini-card">
+            <h4>3. Detailed COCOMO</h4>
+            <p>Project ke har phase/module ke liye separate estimation. Most accurate.</p>
+          </div>
+          <div class="mini-card">
+            <h4>COCOMO II (1995)</h4>
+            <p>Boehm ka updated model. Modern development methods support karta hai (OO, reuse, etc.).</p>
+          </div>
+        </div>
+        
+        <p style="margin-top:14px;"><strong>Basic COCOMO Formulas:</strong></p>
+        <div class="code-block">
+Project Types:
+  1. Organic    — Small, experienced team, familiar problem
+  2. Semi-detached — Medium team, mixed experience  
+  3. Embedded   — Complex constraints, strict requirements
+
+Effort (E) in Person-Months:
+  Organic:      E = 2.4 × (KLOC)^1.05
+  Semi-detached: E = 3.0 × (KLOC)^1.12
+  Embedded:     E = 3.6 × (KLOC)^1.20
+
+Duration (D) in Months:
+  Organic:      D = 2.5 × E^0.38
+  Semi-detached: D = 2.5 × E^0.35
+  Embedded:     D = 2.5 × E^0.32
+
+Staff (People) = E / D
+
+Person Month (PM) = 152 working hours (approx)
+        </div>
+        
+        <div class="important-box">
+          <div class="label">⭐ EXAM EXAMPLE</div>
+          <p>Q: KLOC = 10, Organic project. Find Effort, Duration, Staff.<br>
+          E = 2.4 × (10)^1.05 = 2.4 × 11.22 = 26.93 PM<br>
+          D = 2.5 × (26.93)^0.38 = 2.5 × 4.04 ≈ 10.1 months<br>
+          Staff = 26.93/10.1 ≈ 2.67 ≈ 3 people</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="u5-risk">
+      <div class="card-title green">Risk Analysis & Management</div>
+      <span class="hinglish">💡 Software project mein kya galat ho sakta hai — pehle se identify karo aur plan karo</span>
+      <div class="prose">
+        <div class="def-box">
+          <strong>📖 DEFINITION</strong>
+          Risk is a potential problem that may or may not occur. Risk management involves identifying, analyzing, planning, and controlling risks to minimize their impact on the project.
+        </div>
+        
+        <p><strong>Types of Project Risks:</strong></p>
+        <table>
+          <tr><th>Risk Type</th><th>Examples</th></tr>
+          <tr><td><strong>Project Risks</strong></td><td>Schedule slippage, budget overrun, staff turnover</td></tr>
+          <tr><td><strong>Technical Risks</strong></td><td>Technology not working, performance issues, integration problems</td></tr>
+          <tr><td><strong>Business Risks</strong></td><td>Market change, competition, budget cuts</td></tr>
+          <tr><td><strong>Known Risks</strong></td><td>Risks jo clearly identify ho sakti hain (requirements unclear)</td></tr>
+          <tr><td><strong>Predictable Risks</strong></td><td>Past projects se extrapolate kiye (staff turnover probability)</td></tr>
+          <tr><td><strong>Unpredictable Risks</strong></td><td>Extremely difficult to identify (natural disaster)</td></tr>
+        </table>
+        
+        <p style="margin-top:14px;"><strong>Risk Management Process:</strong></p>
+        <div class="phase-box">
+          <div class="phase" style="background:#7c6af720;color:#7c6af7;">Risk<br>Identification</div>
+          <div class="phase" style="background:#f76a9e20;color:#f76a9e;">Risk<br>Analysis</div>
+          <div class="phase" style="background:#6af7c220;color:#6af7c2;">Risk<br>Planning</div>
+          <div class="phase" style="background:#f7c66a20;color:#f7c66a;">Risk<br>Monitoring</div>
+        </div>
+        
+        <div class="code-block">
+Risk Exposure (RE) = Probability × Impact
+
+Risk Mitigation Strategies:
+  1. Avoidance:  Risk causing factor ko eliminate karo
+  2. Monitoring: Risk ke signs monitor karo
+  3. Contingency: Risk ho toh backup plan ready rakhna
+  4. Transfer: Risk kisi aur ko transfer (insurance)
+  5. Accept: Low-impact risks accept karo
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PYQ SOLVED ==================== -->
+  <section class="section" id="pyq">
+    <div class="unit-header">
+      <div class="unit-num" style="background:#ffffff15;color:#fff;border:2px solid #ffffff33;">PY</div>
+      <div class="unit-header-text">
+        <h2>Previous Year Questions — Solved (2020-2024)</h2>
+        <p>AKTU KCS601 last 5 years ke important questions ke answers</p>
+      </div>
+    </div>
+
+    <!-- 2024 PAPER -->
+    <div class="pyq-card">
+      <div class="pyq-header">
+        <div class="card-title" style="margin:0;">📄 2023-24 Exam Paper Solutions</div>
+        <span class="pyq-year">2023-24</span>
+      </div>
+      
+      <details>
+        <summary>Q1(a) Define the term Software Engineering | 2 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>Software Engineering (IEEE Definition):</strong> Software Engineering is the application of a <em>systematic, disciplined, and quantifiable approach</em> to the development, operation, and maintenance of software, and the study of these approaches.
+            <br><br>
+            <strong>Simple words mein:</strong> Software Engineering ek aisi discipline hai jo engineering principles aur methods apply karke high quality software efficiently develop karne ka kaam karti hai.
+            <br><br>
+            <strong>Key aspects:</strong> Process, Methods, Tools, Quality focus.
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q1(b) Discuss the various characteristics of software | 2 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>Software Characteristics:</strong><br>
+            1. <strong>Software doesn't wear out</strong> — Hardware physically deteriorates (bathtub curve), software logically deteriorates due to change-induced failures.<br>
+            2. <strong>Software is not manufactured</strong> — It's built/engineered, not manufactured on assembly line.<br>
+            3. <strong>Software is complex</strong> — Millions of lines of code, complex interactions.<br>
+            4. <strong>Software can be reused</strong> — Components, libraries, frameworks.<br>
+            5. <strong>Software is intangible</strong> — Cannot be physically touched.<br>
+            6. <strong>Software deteriorates</strong> — Bug fixes introduce new bugs (change-induced failures).
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q1(c) Explain the need of SRS | 2 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>Need of SRS:</strong><br>
+            1. Developer aur customer ke beech formal agreement document hai<br>
+            2. Project ka base document — estimation, planning isi se hoti hai<br>
+            3. Testing ka benchmark — test cases SRS se derive hote hain<br>
+            4. Future maintenance ke liye reference document<br>
+            5. Ambiguity aur misunderstanding reduce karta hai<br>
+            6. New team members ko onboard karne mein help karta hai<br>
+            7. Scope creep prevent karta hai
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q2(a) Software engineering is layered technology — Illustrate | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER (10 marks — detail mein likhna):</span>
+          <div class="ans-section">
+            <strong>Software Engineering as Layered Technology:</strong><br><br>
+            Software engineering ko ek layered technology ke roop mein dekha jaata hai. Roger Pressman ke anusar, SE ke 4 layers hain:
+            <br><br>
+            <pre style="color:#6af7c2;font-family:'IBM Plex Mono',monospace;font-size:.8rem;line-height:1.8;">
+  ┌───────────────────────────────────────┐
+  │           TOOLS                       │ ← Layer 4 (Top)
+  │   CASE tools, IDEs, debuggers         │
+  ├───────────────────────────────────────┤
+  │           METHODS                     │ ← Layer 3
+  │   Technical know-how: analysis,       │
+  │   design, coding, testing methods     │
+  ├───────────────────────────────────────┤
+  │           PROCESS                     │ ← Layer 2
+  │   Framework: phases, activities,      │
+  │   deliverables, milestones            │
+  ├───────────────────────────────────────┤
+  │      QUALITY FOCUS (Foundation)       │ ← Layer 1 (Base)
+  │   Culture of quality, standards       │
+  └───────────────────────────────────────┘</pre>
+            <strong>Layer 1 — Quality Focus (Foundation):</strong> Sab kuch quality pe based hai. Continuous improvement ki culture honi chahiye.<br><br>
+            <strong>Layer 2 — Process:</strong> Methodologies aur frameworks define karte hain software kaise develop hoga. Phases, milestones, deliverables define hote hain. SDLC models isi layer ka part hain.<br><br>
+            <strong>Layer 3 — Methods:</strong> Technical guidance dete hain — requirements kaise gather karein, design kaise karein, code kaise karein, test kaise karein. Structured aur OO methods included hain.<br><br>
+            <strong>Layer 4 — Tools:</strong> Process aur methods ko automate/support karne ke liye. CASE tools, IDEs, testing tools, configuration management tools.
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q3(a) Explain Software Quality Attributes in detail | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>Software Quality Attributes — McCall's Quality Model:</strong><br><br>
+            McCall ne 3 categories mein 11 quality factors define kiye hain:<br><br>
+            <strong>1. Product Operations (Software use karte waqt ki quality):</strong><br>
+            • <strong>Correctness:</strong> Software apni requirements fulfill karta hai? All requirements implemented?<br>
+            • <strong>Reliability:</strong> Failure ke bina kaam karne ki ability. MTBF (Mean Time Between Failures) se measure hoti hai.<br>
+            • <strong>Efficiency:</strong> Minimum computing resources (time, memory) mein maximum performance.<br>
+            • <strong>Integrity:</strong> Unauthorized access se security. Data protection.<br>
+            • <strong>Usability:</strong> Learning aur usage kitna easy hai. UI/UX related.<br><br>
+            <strong>2. Product Revision (Software modify karna):</strong><br>
+            • <strong>Maintainability:</strong> Defect locate aur fix karna kitna easy hai.<br>
+            • <strong>Flexibility:</strong> Change karna kitna easy hai.<br>
+            • <strong>Testability:</strong> Test cases define karna aur testing kitna easy hai.<br><br>
+            <strong>3. Product Transition (Environment change):</strong><br>
+            • <strong>Portability:</strong> Different platforms pe run karna.<br>
+            • <strong>Reusability:</strong> Components doosre applications mein use karna.<br>
+            • <strong>Interoperability:</strong> Doosre systems ke saath interface karna.<br><br>
+            <strong>Quality Triangle:</strong> Cost ↔ Schedule ↔ Quality — teen ka balance zaroori hai. Ek badhao toh doosra affect hota hai.
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q4(b) Compare SEI CMM Model and ISO 9000. Discuss 5 levels of CMM | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>SEI CMM Model:</strong><br>
+            CMM (Capability Maturity Model) SEI Carnegie Mellon ne develop kiya. Software process maturity 5 levels mein measure karta hai.<br><br>
+            <strong>Level 1 — INITIAL:</strong> Chaotic. Ad-hoc processes. "Fire Fighting" mode. Success hero individuals pe dependent. No documented processes. Cost/schedule estimates unreliable.<br><br>
+            <strong>Level 2 — REPEATABLE:</strong> Basic project management. Requirements management, project planning, quality assurance established. Past successes repeat ho sakte hain similar projects pe.<br><br>
+            <strong>Level 3 — DEFINED:</strong> Documented standard process for entire org. Training program hai. Software process defined and followed. SEPG (Software Engineering Process Group) hota hai.<br><br>
+            <strong>Level 4 — MANAGED:</strong> Quantitative management. Process aur product quality statistically measured. Predictions reliable hain. SPC (Statistical Process Control) use hoti hai.<br><br>
+            <strong>Level 5 — OPTIMIZING:</strong> Continuous process improvement. Defect prevention. Technology change management. Innovation culture. Entire organization learning.<br><br>
+            <strong>CMM vs ISO 9000 Comparison:</strong><br>
+            • CMM = Software-specific process improvement model | ISO = Any industry quality standard<br>
+            • CMM = 5 maturity levels | ISO = Certification (yes/no)<br>
+            • CMM = More prescriptive | ISO = More general principles<br>
+            • CMM = US DoD origin | ISO = International standard<br>
+            • CMM = Assessment-based | ISO = Audit/registration based
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q5(a) Explain Cohesion and Coupling — all forms | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>Coupling (Modules ke beech dependence — Low chahiye):</strong><br><br>
+            1. <strong>Data Coupling (Best):</strong> Sirf simple data parameters share karte hain. Example: findMax(int a, int b) — sirf 2 integers pass kiye.<br>
+            2. <strong>Stamp Coupling:</strong> Poori data structure pass ki jati hai. Example: passing whole student object jab sirf roll number chahiye tha.<br>
+            3. <strong>Control Coupling:</strong> Control flags pass karna. Example: processRecord(record, printFlag) — flag se behavior control.<br>
+            4. <strong>External Coupling:</strong> External medium/format pe depend karna. Same file format ya global data structure use karna.<br>
+            5. <strong>Common Coupling:</strong> Global variables share karna. Multiple modules same global variable modify karte hain. Dangerous!<br>
+            6. <strong>Content Coupling (Worst):</strong> Ek module doosre ke internal data/code directly access karta hai. GOTO to another module.<br><br>
+            <strong>Cohesion (Module ke andar relatedness — High chahiye):</strong><br><br>
+            1. <strong>Functional (Best):</strong> Sirf ek specific well-defined task. "Calculate Interest" = sirf yahi kaam.<br>
+            2. <strong>Sequential:</strong> Elements sequential hain, ek ka output doosre ka input. "Read file → Parse → Process"<br>
+            3. <strong>Communicational:</strong> Same data pe operate karna. "Update student record" — name, marks, attendance sab same student ka.<br>
+            4. <strong>Procedural:</strong> Ek process ke sequential steps. Open file → Read → Close.<br>
+            5. <strong>Temporal:</strong> Same time pe execute hona. All initialization functions ek module mein.<br>
+            6. <strong>Logical:</strong> Same category lekin unrelated. "All error handling routines" — logical group but different purposes.<br>
+            7. <strong>Coincidental (Worst):</strong> Random grouping, koi logical connection nahi. Utility module jisme random functions hain.
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q6(a) BVC Testing — Prime Number [1,100] | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>Program:</strong> Input integer N in range [1,100], determine if prime or not.<br><br>
+            <strong>Boundary Value Analysis (BVC) Test Cases:</strong><br>
+            Range = [1, 100], so: min=1, max=100<br><br>
+            <strong>Normal BVC Test Cases (7):</strong><br>
+            | Test Case | Input | Expected Output |<br>
+            | BVC-1 | 0 (below min) | Error/Invalid |<br>
+            | BVC-2 | 1 (min) | Not prime |<br>
+            | BVC-3 | 2 (min+1) | Prime |<br>
+            | BVC-4 | 50 (nominal) | Not prime |<br>
+            | BVC-5 | 99 (max-1) | Not prime |<br>
+            | BVC-6 | 100 (max) | Not prime |<br>
+            | BVC-7 | 101 (above max) | Error/Invalid |<br><br>
+            <strong>Robust BVC (9 test cases — add extreme values):</strong><br>
+            Add: BVC-8: -1 (min-2) | Error; BVC-9: 102 (max+2) | Error<br><br>
+            <strong>Worst Case BVC</strong> creates all combinations of boundary values — 5^2 = 25 test cases.<br><br>
+            <strong>Test Cases for Prime Check Logic:</strong><br>
+            Prime numbers to test: 2, 3, 5, 7, 97 (boundary prime)<br>
+            Non-prime: 1, 4, 50, 100
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q7(b) COCOMO Model in detail + Person Month | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>COCOMO (COnstructive COst MOdel) — Barry Boehm, 1981:</strong><br><br>
+            <strong>Person Month (PM):</strong> Ek person ko ek month (152 working hours) mein complete karna. E.g., 10 PM = ek engineer 10 mahine mein, ya 10 engineers 1 mahine mein kaam.<br><br>
+            <strong>3 Models:</strong><br><br>
+            <strong>1. Basic COCOMO:</strong> Simple, 3 project types ke liye formulas.<br>
+            Organic: E = 2.4(KLOC)^1.05, D = 2.5E^0.38<br>
+            Semi-detached: E = 3.0(KLOC)^1.12, D = 2.5E^0.35<br>
+            Embedded: E = 3.6(KLOC)^1.20, D = 2.5E^0.32<br><br>
+            <strong>2. Intermediate COCOMO:</strong> 15 cost drivers add karta hai (Product attributes, Computer attributes, Personnel attributes, Project attributes). EAF (Effort Adjustment Factor) calculate karte hain.<br><br>
+            <strong>3. Detailed COCOMO:</strong> Har phase ke liye alag estimation. Most accurate.<br><br>
+            <strong>COCOMO II:</strong> 1995 ka updated version. Early design model, Post-architecture model. Function points aur KLOC dono support karta hai. OO, reuse, COTS components handle karta hai.<br><br>
+            <strong>Limitations:</strong> LOC estimate karna mushkil hai. Historical data zaroori hai. Technology changes se inaccurate.
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- 2022 PAPER -->
+    <div class="pyq-card">
+      <div class="pyq-header">
+        <div class="card-title" style="margin:0;">📄 2022-23 Exam Paper Solutions</div>
+        <span class="pyq-year">2022-23</span>
+      </div>
+      
+      <details>
+        <summary>Q1 Section A — All Brief Answers</summary>
+        <div class="details-body">
+          <span class="ans-label">BRIEF ANSWERS (2 marks each):</span>
+          <div class="ans-section">
+            <strong>(a) Generic Software with example:</strong> Aisa software jo general market ke liye develop hota hai. Examples: MS Office, Tally, VLC Player, WhatsApp.<br><br>
+            <strong>(b) Software Components:</strong> Programs (executable code) + Data Structures + Documents (user manual, technical docs).<br><br>
+            <strong>(c) Two Non-Functional Requirements:</strong> (1) Performance — system 2 seconds mein respond kare. (2) Security — data 256-bit encryption se protect ho.<br><br>
+            <strong>(d) Software Prototyping:</strong> Ek preliminary working model (prototype) banana jo customer ko demonstrate kiya jata hai requirements validate karne ke liye. Final product nahi, sirf model.<br><br>
+            <strong>(e) Horizontal and Vertical Partitioning:</strong> Horizontal — system ko layers/tiers mein divide karna (UI, Business Logic, Data). Vertical — system ko functional segments mein divide karna (payroll, HR, accounts).<br><br>
+            <strong>(f) Software Architecture:</strong> System ka high-level structure — components, relationships, external interactions define karta hai.<br><br>
+            <strong>(g) Verification vs Validation:</strong> Verification = "Building product right?" (internal process). Validation = "Building right product?" (meets user needs). V&V both essential.<br><br>
+            <strong>(h) Alpha vs Beta Testing:</strong> Alpha = developer site pe real users test karte hain. Beta = customer sites pe real environment mein testing, developer absent.<br><br>
+            <strong>(i) CASE Tools Advantages:</strong> Automation of tedious tasks, consistency maintained, documentation automatic, errors reduce.<br><br>
+            <strong>(j) Adaptive Maintenance:</strong> Changing environment ke liye software modify karna. Example: Windows XP ke software ko Windows 11 pe compatible banana.
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q2(a) Iterative Waterfall and Spiral Model — activities in each phase | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>Iterative Waterfall Model:</strong><br>
+            Classic waterfall mein phases strictly sequential hain. Iterative waterfall mein har phase previous phase ko feedback de sakti hai (feedback loops).<br><br>
+            Phases aur activities:<br>
+            1. <strong>Communication:</strong> Requirements gathering, stakeholder meetings, feasibility study<br>
+            2. <strong>Planning:</strong> Estimation (COCOMO), scheduling (Gantt chart), risk analysis<br>
+            3. <strong>Modeling (Design):</strong> Architectural design, detailed design, DFD, ER diagrams, structure charts<br>
+            4. <strong>Construction:</strong> Coding (actual programming), unit testing, code review<br>
+            5. <strong>Deployment:</strong> System testing, acceptance testing, delivery, support<br><br>
+            Iterative feature: Phase 3 problem milne par Phase 2 pe wapas, Phase 4 problem par Phase 3 pe wapas.<br><br>
+            <strong>Spiral Model:</strong> (4 quadrants detail mein — upar diye gaye notes se likho)
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q2(e) Software Configuration Management + Version Control + Project Risks | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>SCM:</strong> Software ki versions, changes, configurations manage karna. Ensure karna ki right version deploy ho.<br><br>
+            <strong>SCM Tasks:</strong> Configuration identification → Version control → Change control → Configuration audit → Status accounting<br><br>
+            <strong>Version Control:</strong> Software ke different versions track karna. Git mein: main branch → feature branches → merge back. Roll back possible.<br><br>
+            <strong>Version Naming:</strong> Major.Minor.Patch (e.g., 2.1.3 = Major ver 2, Minor update 1, Patch 3)<br><br>
+            <strong>Project Risk Types:</strong><br>
+            1. <strong>Project Risks:</strong> Schedule slip, budget overrun, staff resign kar jaye, requirements change<br>
+            2. <strong>Technical Risks:</strong> Design/implementation problem, interface mismatch, performance issue, technology obsolete<br>
+            3. <strong>Business Risks:</strong> Market change, competitor better product, manager resign, budget cut<br>
+            4. <strong>External Risks:</strong> Government regulations change, natural disaster, pandemic
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q4(a) SEI-CMM Model + State of Fire Fighting | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>SEI-CMM Model:</strong> Upar diye gaye Unit 2 notes se 5 levels detail mein likhna.<br><br>
+            <strong>State of Fire Fighting:</strong><br>
+            CMM Level 1 organizations "fire fighting" mode mein hoti hain. Matlab:<br>
+            • Every project ek crisis hai — problems pe react karte hain, prevent nahi karte<br>
+            • No documented processes — sab ad-hoc decisions<br>
+            • Success individual heroics pe dependent — agar key person chala gaya, project fail<br>
+            • Estimates always wrong — budget aur schedule overrun normal hai<br>
+            • No lessons learned — same mistakes repeat hote hain<br><br>
+            Analogy: Ek fire station jo sirf aag lagne par kaam karta hai — fire prevention program koi nahi. Hamesha emergency mode mein.<br><br>
+            Isse nikalne ke liye: CMM Level 2 mein jaana — basic project management establish karna, requirements manage karna, quality assurance karna.
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q6(a) Cyclomatic Complexity — Control Flow Graph for given code | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>Given Code:</strong><br>
+            IF A = 100<br>
+            &nbsp;&nbsp;THENIF B &gt; C<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;THEN A = B<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;ELSE A = C<br>
+            &nbsp;&nbsp;ENDIF<br>
+            ENDIF<br>
+            PRINT A<br><br>
+            <strong>Control Flow Graph Nodes:</strong><br>
+            Node 1: Start<br>
+            Node 2: IF A = 100 (decision node)<br>
+            Node 3: IF B &gt; C (decision node)<br>
+            Node 4: A = B<br>
+            Node 5: A = C<br>
+            Node 6: PRINT A + End<br><br>
+            <strong>Edges:</strong><br>
+            1→2, 2→3 (A=100), 2→6 (A≠100), 3→4 (B&gt;C), 3→5 (B≤C), 4→6, 5→6<br>
+            E=7, N=6<br><br>
+            <strong>Method 1:</strong> V(G) = E - N + 2 = 7 - 6 + 2 = <strong>3</strong><br>
+            <strong>Method 2:</strong> Regions = 3 (2 enclosed + 1 outside) = <strong>3</strong><br>
+            <strong>Method 3:</strong> P = 2 (two decision nodes) → V(G) = 2 + 1 = <strong>3</strong><br><br>
+            <strong>Independent Paths:</strong><br>
+            Path 1: 1→2→6 (A≠100, directly PRINT)<br>
+            Path 2: 1→2→3→4→6 (A=100, B&gt;C, A=B)<br>
+            Path 3: 1→2→3→5→6 (A=100, B≤C, A=C)
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- 2021/2020 Questions -->
+    <div class="pyq-card">
+      <div class="pyq-header">
+        <div class="card-title" style="margin:0;">📄 2020-21 Key Questions</div>
+        <span class="pyq-year">2020-21</span>
+      </div>
+      
+      <details>
+        <summary>DFD — Data Flow Diagrams Levels | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            <strong>DFD (Data Flow Diagram):</strong> System mein data kaise flow karta hai uska graphical representation.<br><br>
+            <strong>Symbols:</strong> Rectangle (External Entity) + Oval (Process) + Open Rectangle (Data Store) + Arrow (Data Flow)<br><br>
+            <strong>Level 0 (Context Diagram):</strong> Poora system ek oval process. Sirf external entities aur main flows.<br>
+            <strong>Level 1:</strong> System ko 3-7 major processes mein break down karo.<br>
+            <strong>Level 2:</strong> Level 1 processes ko further detail mein break karo.<br><br>
+            <strong>Rules for DFD:</strong><br>
+            • Process ke liye noun + verb (e.g., "Process Order")<br>
+            • Data flow ke liye noun (e.g., "Order Details")<br>
+            • No direct External Entity to External Entity flow<br>
+            • No direct Data Store to Data Store flow<br>
+            • Process ke inputs → outputs hongi
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>COCOMO Model for Project Estimation + Scheduling | 10 marks</summary>
+        <div class="details-body">
+          <span class="ans-label">MODEL ANSWER:</span>
+          <div class="ans-section">
+            COCOMO notes Unit 5 mein dekho. Ye numerical example zaroor practice karo:<br><br>
+            <strong>Problem:</strong> 25 KLOC semi-detached project. Effort, Duration, Staff calculate karo.<br>
+            E = 3.0 × (25)^1.12 = 3.0 × 37.07 = 111.2 PM<br>
+            D = 2.5 × (111.2)^0.35 = 2.5 × 6.1 = 15.25 months<br>
+            Staff = 111.2 / 15.25 ≈ 7.3 ≈ 8 people<br><br>
+            <strong>Project Scheduling:</strong><br>
+            Gantt Chart: Bar chart showing tasks vs timeline<br>
+            PERT Chart: Network diagram showing task dependencies<br>
+            CPM: Critical Path Method — longest path = project duration<br>
+            Critical Path: Path jisme koi slack nahi — delay this = delay project
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- FORMULA SHEET -->
+  <section class="section" id="formula">
+    <div class="unit-header">
+      <div class="unit-num" style="background:#6af7c220;color:#6af7c2;border:2px solid #6af7c244;">📐</div>
+      <div class="unit-header-text">
+        <h2>Quick Revision — Formulas & Key Points</h2>
+        <p>Exam se ek raat pehle padho — most important facts</p>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title green">All Important Formulas</div>
+      <div class="code-block" style="color:#f7c66a;">
+━━━ CYCLOMATIC COMPLEXITY ━━━
+V(G) = E - N + 2    (E=edges, N=nodes)
+V(G) = P + 1        (P=predicate nodes/decisions)
+V(G) = Regions in CFG
+
+━━━ COCOMO (BASIC) ━━━
+Organic:      E = 2.4 × (KLOC)^1.05  |  D = 2.5 × E^0.38
+Semi-det.:    E = 3.0 × (KLOC)^1.12  |  D = 2.5 × E^0.35
+Embedded:     E = 3.6 × (KLOC)^1.20  |  D = 2.5 × E^0.32
+Staff = E / D
+Person Month (PM) ≈ 152 hours
+
+━━━ FUNCTION POINT ━━━
+FP = UFC × (0.65 + 0.01 × ΣFi)
+UFC = Σ(count × weight)
+Fi = 14 general characteristics (0-5 each)
+
+━━━ HALSTEAD'S ━━━
+n = n1 + n2  (vocabulary)
+N = N1 + N2  (length)
+V = N × log₂(n)  (volume)
+D = (n1/2) × (N2/n2)  (difficulty)
+E = D × V  (effort)
+
+━━━ RISK EXPOSURE ━━━
+RE = Probability × Impact
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title yellow">One-Line Definitions — Rapid Fire Revision</div>
+      <div class="prose">
+        <table>
+          <tr><th>Term</th><th>One Line</th></tr>
+          <tr><td>Software Engineering</td><td>Systematic, disciplined approach to software development</td></tr>
+          <tr><td>Software Crisis</td><td>1960s problem — software demand > development capability</td></tr>
+          <tr><td>Waterfall Model</td><td>Sequential phases, no going back, suitable for clear requirements</td></tr>
+          <tr><td>Spiral Model</td><td>Risk-driven iterative model by Boehm — 4 quadrants per iteration</td></tr>
+          <tr><td>SRS</td><td>Complete description of what system will do — IEEE 830 standard</td></tr>
+          <tr><td>DFD Level 0</td><td>Context diagram — entire system as one process</td></tr>
+          <tr><td>Verification</td><td>"Building product right?" — internal process check</td></tr>
+          <tr><td>Validation</td><td>"Building right product?" — meets user needs</td></tr>
+          <tr><td>CMM Level 1</td><td>Initial/Chaotic — fire fighting mode</td></tr>
+          <tr><td>CMM Level 3</td><td>Defined — documented standardized processes</td></tr>
+          <tr><td>CMM Level 5</td><td>Optimizing — continuous process improvement</td></tr>
+          <tr><td>Coupling</td><td>Inter-module dependence — LOW chahiye</td></tr>
+          <tr><td>Cohesion</td><td>Intra-module relatedness — HIGH chahiye</td></tr>
+          <tr><td>Data Coupling</td><td>Best coupling — sirf simple data parameters share</td></tr>
+          <tr><td>Content Coupling</td><td>Worst coupling — direct internal code access</td></tr>
+          <tr><td>Functional Cohesion</td><td>Best cohesion — sirf ek specific task</td></tr>
+          <tr><td>Cyclomatic Complexity</td><td>Independent paths in code — V(G) = E-N+2</td></tr>
+          <tr><td>Alpha Testing</td><td>Dev site pe end users test karte hain</td></tr>
+          <tr><td>Beta Testing</td><td>Customer site pe, dev absent, real environment</td></tr>
+          <tr><td>Stub</td><td>Dummy called module — top-down testing mein</td></tr>
+          <tr><td>Driver</td><td>Dummy calling module — bottom-up testing mein</td></tr>
+          <tr><td>Adaptive Maintenance</td><td>Changed environment ke liye modify karna</td></tr>
+          <tr><td>Corrective Maintenance</td><td>Bugs fix karna</td></tr>
+          <tr><td>Perfective Maintenance</td><td>Performance improve, new features add</td></tr>
+          <tr><td>COCOMO</td><td>LOC se effort/time estimate karna — Boehm 1981</td></tr>
+          <tr><td>Person Month</td><td>Ek engineer ki ek mahine ki effort ≈ 152 hours</td></tr>
+          <tr><td>CASE Tools</td><td>Computer Aided SE — automate software dev tasks</td></tr>
+          <tr><td>Risk Exposure</td><td>Probability × Impact</td></tr>
+          <tr><td>Reverse Engineering</td><td>Existing software se design/docs recover karna</td></tr>
+        </table>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title red">Last Minute Tips — Exam Strategy</div>
+      <div class="prose">
+        <div class="grid2">
+          <div class="mini-card">
+            <h4>Section A (2 marks × 10)</h4>
+            <p>Definition + one example. 3-4 lines enough. No lengthy explanations needed. Use bullet points. Definition direct likhna — no introduction para.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Section B (10 marks × 3)</h4>
+            <p>Diagram zaroor banana (flowchart, DFD, spiral model drawing). Table use karo comparison questions mein. 2-3 pages per question. Examples dena.</p>
+          </div>
+          <div class="mini-card">
+            <h4>Section C (10 marks × 1)</h4>
+            <p>Detailed answer. Subheadings use karo. Diagrams, tables, examples sab include karo. 3-4 pages likhna. Introduction + main content + conclusion.</p>
+          </div>
+          <div class="mini-card">
+            <h4>High-Yield Topics 2025</h4>
+            <p>SEI-CMM levels, Coupling/Cohesion types, Cyclomatic Complexity calculation, COCOMO numerical, SRS structure, Spiral Model diagram, DFD levels. Ye definitely aayenge!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="text-align:center;color:var(--text-muted);font-size:.8rem;padding:20px 0;border-top:1px solid var(--border);">
+    KCS601 Software Engineering Complete Guide | AKTU B.Tech Sem VI<br>
+    Prepared for exam success 🎯 | All units covered | PYQ 2020-2024 solved
+  </div>
+</main>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const scrolled = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('pbar').style.width = scrolled + '%';
+});
+
+// Active nav link
+const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[href="#${id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('section[id], div[id^="u"]').forEach(s => observer.observe(s));
+
+// Smooth scroll
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+    if (window.innerWidth <= 768) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  });
+});
+</script>
+</body>
+</html>
