@@ -1,0 +1,50 @@
+ubuntu/
+│
+├── README.md
+│
+├── 01-Linux-Basics/
+│   ├── file-system.md
+│   ├── users-and-groups.md
+│   └── permissions.md
+│
+├── 02-Daily-Commands/
+│   ├── ls.md
+│   ├── cd.md
+│   ├── pwd.md
+│   ├── cp.md
+│   ├── mv.md
+│   ├── rm.md
+│   └── mkdir.md
+│
+├── 03-Text-Processing/
+│   ├── cat.md
+│   ├── less.md
+│   ├── grep.md
+│   ├── awk.md
+│   └── sed.md
+│
+├── 04-System-Monitoring/
+│   ├── ps.md
+│   ├── top.md
+│   ├── htop.md
+│   ├── df.md
+│   └── du.md
+│
+├── 05-Networking/
+│   ├── ping.md
+│   ├── ssh.md
+│   ├── netstat.md
+│   ├── ip.md
+│   └── tcp-ip.md
+│
+├── 06-Shell-Scripting/
+│
+├── 07-Embedded-Linux/
+│
+├── 08-Python-for-Linux/
+│   ├── python-installation.md
+│   ├── file-handling.md
+│   ├── subprocess.md
+│   └── automation.md
+│
+└── Resources/
